@@ -1,21 +1,22 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 
-export default class login extends Component {
-
-  function submit(){
-    setUsername()
-  }
-
+const Login = () => {
   const [username, setUsername] = useState("hello");
-    render() {
-    return (
-      <div>
-        <h1 className="header">Login to your existing account</h1>
-        <form action="submit">
-          <input type="text" placeholder="username" value={username} />
-          <button onClick={submit()}>Submit</button>
-        </form>
-      </div>
-    );
-  }
-}
+
+  return (
+    <div>
+      <h1 className="header">{username}</h1>
+      <form action="submit">
+        <input
+          type="text"
+          placeholder="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <button>Submit</button>
+      </form>
+    </div>
+  );
+};
+
+export default Login;
