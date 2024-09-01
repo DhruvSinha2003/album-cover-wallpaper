@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./App.css";
-const CLIENT_ID = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
-const CLIENT_SECRET = process.env.REACT_APP_SPOTIFY_CLIENT_SECRET;
+import Home from "./Home";
 
 function App() {
   const [accessToken, setAccessToken] = useState("");
