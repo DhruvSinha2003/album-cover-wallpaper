@@ -8,9 +8,6 @@ function App() {
   const [suggestions, setSuggestions] = useState([]);
   const [error, setError] = useState(null);
 
-  console.log("CLIENT_ID:", CLIENT_ID);
-  console.log("CLIENT_SECRET:", CLIENT_SECRET);
-
   useEffect(() => {
     getAccessToken();
   }, []);
