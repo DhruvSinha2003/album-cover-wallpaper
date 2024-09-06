@@ -9,6 +9,26 @@ function Home = () => {
   const [albumCover, setAlbumCover] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
   const [error, setError] = useState(null);
+
+  useEffect(()=>{
+
+  }, []);
+
+  const getAccessToken = async() => {
+    try{
+      const response = await fetch( "https://accounts.spotify.com/api/token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: "Basic " + btoa(CLIENT_ID + ":" + CLIENT_SECRET),
+        },
+        body: "grant_type=client_credentials",
+      });
+
+    }catch {
+
+    }
+  }
   
     return(
       <div className="container">
