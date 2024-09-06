@@ -24,9 +24,13 @@ function Home = () => {
         },
         body: "grant_type=client_credentials",
       });
+      
+      const data = response.json();
 
-    }catch {
+      setAccessToken(data.accessToken);
 
+    }catch(error) {
+      console.log(error);
     }
   }
   
