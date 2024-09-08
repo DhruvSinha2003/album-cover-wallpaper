@@ -6,7 +6,7 @@ const CLIENT_SECRET = process.env.REACT_APP_SPOTIFY_CLIENT_SECRET;
 
 function Home() {
   const [accessToken, setAccessToken] = useState("");
-  const [albumName, setAlbumName] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [albumCover, setAlbumCover] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
 
@@ -34,7 +34,7 @@ function Home() {
 
   const handleInputChange = async (event) => {
     const input = event.target.value;
-    setAlbumName(input);
+    setSearchTerm(input);
 
     if (input.length > 2) {
       try {
@@ -54,6 +54,7 @@ function Home() {
             name: item.name,
             artist: item.artists[0].name,
             thumbnail: item.images[2].url, // Using the smallest image
+            id: item.id, // Adding the album ID for precise querying
           }))
         );
       } catch (error) {
@@ -64,24 +65,22 @@ function Home() {
     }
   };
 
-  const searchAlbum = async (album) => {
-    setAlbumName(album);
+  const searchAlbum = async (albumId) => {
     setSuggestions([]);
     try {
-      const searchResponse = await fetch(
-        `https://api.spotify.com/v1/search?q=${encodeURIComponent(
-          album
-        )}&type=album&limit=1`,
+      const albumResponse = await fetch(
+        `https://api.spotify.com/v1/albums/${albumId}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         }
       );
-      const searchData = await searchResponse.json();
+      const albumData = await albumResponse.json();
 
-      if (searchData.albums.items.length > 0) {
-        setAlbumCover(searchData.albums.items[0].images[0].url);
+      if (albumData) {
+        setAlbumCover(albumData.images[0].url);
+        setSearchTerm(`${albumData.name} - ${albumData.artists[0].name}`);
       } else {
         setAlbumCover(null);
       }
@@ -95,18 +94,17 @@ function Home() {
       <h1>Album Cover Art</h1>
       <input
         type="text"
-        value={albumName}
+        value={searchTerm}
         onChange={handleInputChange}
         placeholder="Enter Album Name"
       />
-      <button onClick={() => searchAlbum(albumName)}>Submit</button>
 
       {suggestions.length > 0 && (
         <ul className="suggestions-list">
-          {suggestions.map((suggestion, index) => (
+          {suggestions.map((suggestion) => (
             <li
-              key={index}
-              onClick={() => searchAlbum(suggestion.name)}
+              key={suggestion.id}
+              onClick={() => searchAlbum(suggestion.id)}
               className="suggestion-item"
             >
               <img
