@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Home.css";
+
 const CLIENT_ID = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
 const CLIENT_SECRET = process.env.REACT_APP_SPOTIFY_CLIENT_SECRET;
 
@@ -48,10 +49,18 @@ function Home() {
           }
         );
         const data = await response.json();
-        setSuggestions(data.albums.items.map((item) => item.name));
+        setSuggestions(
+          data.albums.items.map((item) => ({
+            name: item.name,
+            artist: item.artists[0].name,
+            thumbnail: item.images[2].url, // Using the smallest image
+          }))
+        );
       } catch (error) {
         console.log(error);
       }
+    } else {
+      setSuggestions([]);
     }
   };
 
@@ -82,34 +91,42 @@ function Home() {
   };
 
   return (
-    <>
-      <div className="container">
-        <h1>Album Cover Art</h1>
-        <input
-          type="text"
-          value={albumName}
-          onChange={handleInputChange}
-          placeholder="Enter Album Name"
-        />
-        <button onClick={() => searchAlbum(albumName)}>Submit</button>
-      </div>
+    <div className="container">
+      <h1>Album Cover Art</h1>
+      <input
+        type="text"
+        value={albumName}
+        onChange={handleInputChange}
+        placeholder="Enter Album Name"
+      />
+      <button onClick={() => searchAlbum(albumName)}>Submit</button>
+
       {suggestions.length > 0 && (
-        <ul>
+        <ul className="suggestions-list">
           {suggestions.map((suggestion, index) => (
-            <li key={index} onClick={() => searchAlbum(suggestion)}>
-              {suggestion}
+            <li
+              key={index}
+              onClick={() => searchAlbum(suggestion.name)}
+              className="suggestion-item"
+            >
+              <img
+                src={suggestion.thumbnail}
+                alt={`${suggestion.name} thumbnail`}
+                className="suggestion-thumbnail"
+              />
+              <div className="suggestion-info">
+                <span className="suggestion-album">{suggestion.name}</span>
+                <span className="suggestion-artist">{suggestion.artist}</span>
+              </div>
             </li>
           ))}
         </ul>
       )}
+
       {albumCover && (
-        <img
-          src={albumCover}
-          alt="album cover"
-          style={{ maxWidth: "500px", maxHeight: "500px" }}
-        />
+        <img src={albumCover} alt="album cover" className="album-cover" />
       )}
-    </>
+    </div>
   );
 }
 
