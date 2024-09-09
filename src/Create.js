@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
+import Sidebar from "./Sidebar";
 
 export default function Create() {
   const location = useLocation();
@@ -17,6 +18,7 @@ export default function Create() {
       ) : (
         <p>No image provided</p>
       )}
+      <Sidebar />
     </div>
   );
 }
