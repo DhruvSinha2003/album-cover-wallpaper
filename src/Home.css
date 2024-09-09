@@ -1,17 +1,19 @@
 body {
   background-color: #141a1a;
   color: #f0f0f0;
+  display: flex;
+  justify-content: center;
 }
 
 .App {
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
   padding: 20px;
   font-family: Arial, sans-serif;
 }
 
 input {
-  width: 70%;
+  width: 100%;
   padding: 10px;
   font-size: 16px;
 }
@@ -19,7 +21,7 @@ input {
 button {
   padding: 10px 20px;
   font-size: 16px;
-  background-color: #1db954;
+  background-color: #121312;
   color: white;
   border: none;
   cursor: pointer;
