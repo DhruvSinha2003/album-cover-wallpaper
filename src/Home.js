@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "./Home.css";
 
 const CLIENT_ID = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
@@ -122,7 +123,12 @@ function Home() {
       )}
 
       {albumCover && (
-        <img src={albumCover} alt="album cover" className="album-cover" />
+        <>
+          <img src={albumCover} alt="album cover" className="album-cover" />
+          <Link to="/create" state={{ image: albumCover }}>
+            <button>Create a wallpaper</button>
+          </Link>
+        </>
       )}
     </div>
   );
