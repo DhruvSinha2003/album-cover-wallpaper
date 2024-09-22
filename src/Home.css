@@ -36,6 +36,7 @@ button {
 }
 
 .suggestion-item {
+  width: 480px;
   display: flex;
   align-items: center;
   padding: 10px;
@@ -86,7 +87,8 @@ button {
 }
 
 .create-wallpaper-button {
-  margin-top: 20px;
+  margin-left: 4px;
+  margin-top: 6px;
 }
 
 .top-bar {
