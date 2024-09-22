@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { IconContext } from "react-icons";
 import { MdArrowBackIosNew } from "react-icons/md";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 
 export default function Create() {
@@ -9,6 +9,10 @@ export default function Create() {
   const { image } = location.state || {};
   const [canvasSize, setCanvasSize] = useState({ width: 1920, height: 1080 });
   const canvasRef = useRef(null);
+  let navigate = useNavigate();
+  const handleBack = () => {
+    navigate("/");
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -37,7 +41,7 @@ export default function Create() {
       <div style={{ flex: 1 }}>
         <div className="top-bar">
           <IconContext.Provider value={{ size: "1.3em" }}>
-            <div className="back-button">
+            <div className="back-button" onClick={handleBack}>
               <MdArrowBackIosNew />
             </div>
           </IconContext.Provider>
