@@ -130,7 +130,9 @@ function Home() {
             className="home-album-cover"
           />
           <Link to="/create" state={{ image: albumCover }}>
-            <button className="create-wallpaper">Create a wallpaper</button>
+            <button className="create-wallpaper-button">
+              Create a wallpaper
+            </button>
           </Link>
         </>
       )}

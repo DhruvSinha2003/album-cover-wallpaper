@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
+import { IconContext } from "react-icons";
+import { MdArrowBackIosNew } from "react-icons/md";
 import { useLocation } from "react-router-dom";
 import Sidebar from "./Sidebar";
 
@@ -33,7 +35,14 @@ export default function Create() {
   return (
     <div style={{ display: "flex" }}>
       <div style={{ flex: 1 }}>
-        <h1>Create Wallpaper</h1>
+        <div className="top-bar">
+          <IconContext.Provider value={{ size: "1.5em" }}>
+            <div className="back-button">
+              <MdArrowBackIosNew />
+            </div>
+          </IconContext.Provider>
+          <h1>Create Wallpaper</h1>
+        </div>
         <canvas
           ref={canvasRef}
           width={canvasSize.width}
