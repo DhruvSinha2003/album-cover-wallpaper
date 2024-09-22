@@ -1,8 +1,10 @@
 body {
   background-color: #141a1a;
+  height: 100%;
   color: #f0f0f0;
   display: flex;
   justify-content: center;
+  overflow: hidden;
 }
 
 .App {
@@ -13,7 +15,7 @@ body {
 }
 
 input {
-  width: 100%;
+  width: 480px;
   padding: 10px;
   font-size: 16px;
 }
@@ -21,8 +23,8 @@ input {
 button {
   padding: 10px 20px;
   font-size: 16px;
-  background-color: #121312;
-  color: white;
+  background-color: #f0f0f0;
+  color: #141a1a;
   border: none;
   cursor: pointer;
 }
@@ -53,6 +55,7 @@ button {
 }
 
 .suggestion-info {
+  width: 480px;
   display: flex;
   flex-direction: column;
 }
@@ -68,8 +71,20 @@ button {
 
 .album-cover {
   display: block;
-  max-width: 500px;
-  max-height: 500px;
+  max-width: 1000;
+  max-height: 1000px;
   margin-top: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.home-album-cover {
+  display: block;
+  max-width: 480px;
+  max-height: 480px;
+  margin-top: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.create-wallpaper {
+  margin-top: 20px;
 }

@@ -54,8 +54,8 @@ function Home() {
           data.albums.items.map((item) => ({
             name: item.name,
             artist: item.artists[0].name,
-            thumbnail: item.images[2].url, // Using the smallest image
-            id: item.id, // Adding the album ID for precise querying
+            thumbnail: item.images[2].url,
+            id: item.id,
           }))
         );
       } catch (error) {
@@ -124,9 +124,13 @@ function Home() {
 
       {albumCover && (
         <>
-          <img src={albumCover} alt="album cover" className="album-cover" />
+          <img
+            src={albumCover}
+            alt="album cover"
+            className="home-album-cover"
+          />
           <Link to="/create" state={{ image: albumCover }}>
-            <button>Create a wallpaper</button>
+            <button className="create-wallpaper">Create a wallpaper</button>
           </Link>
         </>
       )}
