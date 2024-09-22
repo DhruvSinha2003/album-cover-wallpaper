@@ -36,7 +36,7 @@ export default function Create() {
     <div style={{ display: "flex" }}>
       <div style={{ flex: 1 }}>
         <div className="top-bar">
-          <IconContext.Provider value={{ size: "1.5em" }}>
+          <IconContext.Provider value={{ size: "1.3em" }}>
             <div className="back-button">
               <MdArrowBackIosNew />
             </div>

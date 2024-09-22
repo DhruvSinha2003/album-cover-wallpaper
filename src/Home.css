@@ -93,4 +93,21 @@ button {
   display: flex;
   align-items: center;
   gap: 20px;
+  margin-left: 20px;
+}
+
+.back-button {
+  background-color: #f0f0f0;
+  color: #141a1a;
+  justify-content: center;
+  padding: 5px;
+  padding-top: 7px;
+  padding-right: 7px;
+  border-radius: 15%;
+  transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #141a1a;
+  color: #f0f0f0;
 }
