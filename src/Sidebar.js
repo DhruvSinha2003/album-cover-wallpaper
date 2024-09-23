@@ -8,7 +8,7 @@ export default function Sidebar({ onSizeChange }) {
   };
 
   return (
-    <div style={{ padding: "20px", borderLeft: "1px solid #ccc" }}>
+    <div className="sidebar">
       {sidebarToggle ? (
         <button onClick={() => setSidebarToggle(0)}>Open Sidebar</button>
       ) : (
