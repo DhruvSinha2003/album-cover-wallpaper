@@ -1,3 +1,4 @@
+import { Slider, Stack } from "@mui/material";
 import React, { useState } from "react";
 
 export default function Sidebar({ onSizeChange }) {
@@ -24,6 +25,16 @@ export default function Sidebar({ onSizeChange }) {
           <button onClick={() => handleSizeChange(1080, 2400)}>
             1080x2400
           </button>
+          <div className="sliders">
+            <Stack
+              spacing={2}
+              direction="row"
+              sx={{ alignItems: "center", mb: 1 }}
+            >
+              <Slider aria-label="Volume" />
+            </Stack>
+            <Slider disabled defaultValue={30} aria-label="Disabled slider" />
+          </div>
         </div>
       )}
     </div>

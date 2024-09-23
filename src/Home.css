@@ -4,7 +4,6 @@ body {
   color: #f0f0f0;
   display: flex;
   justify-content: center;
-  overflow: hidden;
 }
 
 .App {
@@ -118,4 +117,10 @@ button {
 .sidebar {
   padding: "20px";
   border-left: 1px #f0f0f0;
+}
+
+.sliders {
+  padding-top: 20px;
+  margin-left: 10%;
+  width: 80%;
 }
