@@ -1,14 +1,17 @@
 import { Slider, Stack } from "@mui/material";
 import React, { useState } from "react";
 
-export default function Sidebar({ onSizeChange }) {
+export default function Sidebar({ onSizeChange, onAlbumSizeChange }) {
   const [sidebarToggle, setSidebarToggle] = useState(0);
   const [albumSize, setAlbumSize] = useState(100);
+
   const handleSizeChange = (width, height) => {
     onSizeChange({ width, height });
-    const handleSliderChange = (event, newValue) => {
-      setAlbumSize(newValue);
-    };
+  };
+
+  const handleSliderChange = (event, newValue) => {
+    setAlbumSize(newValue);
+    onAlbumSizeChange(newValue);
   };
 
   return (
@@ -34,11 +37,11 @@ export default function Sidebar({ onSizeChange }) {
               direction="row"
               sx={{ alignItems: "center", mb: 1 }}
             >
-              <p>AlbumSize</p>
+              <p>Album Size</p>
               <Slider
                 aria-label="AlbumSize"
                 value={albumSize}
-                onChange={handleSizeChange}
+                onChange={handleSliderChange}
                 min={50}
                 max={200}
               />

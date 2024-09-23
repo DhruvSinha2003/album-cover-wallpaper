@@ -8,6 +8,7 @@ export default function Create() {
   const location = useLocation();
   const { image } = location.state || {};
   const [canvasSize, setCanvasSize] = useState({ width: 1920, height: 1080 });
+  const [albumSize, setAlbumSize] = useState(100);
   const canvasRef = useRef(null);
   let navigate = useNavigate();
   const handleBack = () => {
@@ -18,22 +19,28 @@ export default function Create() {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
 
-    // Clear the canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (image) {
       const img = new Image();
       img.onload = () => {
+        const scaleFactor = albumSize / 100;
+        const newWidth = img.width * scaleFactor;
+        const newHeight = img.height * scaleFactor;
         const x = (canvas.width - img.width) / 2;
         const y = (canvas.height - img.height) / 2;
         ctx.drawImage(img, x, y);
       };
       img.src = image;
     }
-  }, [image, canvasSize]);
+  }, [image, canvasSize, albumSize]);
 
   const handleSizeChange = (newSize) => {
     setCanvasSize(newSize);
+  };
+
+  const handleAlbumSizeChange = (newSize) => {
+    setAlbumSize(newSize);
   };
 
   return (
@@ -58,7 +65,10 @@ export default function Create() {
           }}
         />
       </div>
-      <Sidebar onSizeChange={handleSizeChange} />
+      <Sidebar
+        onSizeChange={handleSizeChange}
+        onAlbumSizeChange={handleAlbumSizeChange}
+      />
     </div>
   );
 }
