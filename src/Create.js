@@ -10,30 +10,45 @@ export default function Create() {
   const [canvasSize, setCanvasSize] = useState({ width: 1920, height: 1080 });
   const [albumSize, setAlbumSize] = useState(100);
   const canvasRef = useRef(null);
+  const imageRef = useRef(null);
   let navigate = useNavigate();
+
   const handleBack = () => {
     navigate("/");
   };
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
     if (image) {
       const img = new Image();
       img.onload = () => {
-        const scaleFactor = albumSize / 100;
-        const newWidth = img.width * scaleFactor;
-        const newHeight = img.height * scaleFactor;
-        const x = (canvas.width - img.width) / 2;
-        const y = (canvas.height - img.height) / 2;
-        ctx.drawImage(img, x, y);
+        imageRef.current = img;
+        drawImage();
       };
       img.src = image;
     }
-  }, [image, canvasSize, albumSize]);
+  }, [image]);
+
+  const drawImage = () => {
+    if (canvasRef.current && imageRef.current) {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext("2d");
+      const img = imageRef.current;
+
+      // Clear the canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const scaleFactor = albumSize / 100;
+      const newWidth = img.width * scaleFactor;
+      const newHeight = img.height * scaleFactor;
+      const x = (canvas.width - newWidth) / 2;
+      const y = (canvas.height - newHeight) / 2;
+      ctx.drawImage(img, x, y, newWidth, newHeight);
+    }
+  };
+
+  useEffect(() => {
+    drawImage();
+  }, [canvasSize, albumSize]);
 
   const handleSizeChange = (newSize) => {
     setCanvasSize(newSize);
@@ -68,6 +83,7 @@ export default function Create() {
       <Sidebar
         onSizeChange={handleSizeChange}
         onAlbumSizeChange={handleAlbumSizeChange}
+        albumSize={albumSize}
       />
     </div>
   );
