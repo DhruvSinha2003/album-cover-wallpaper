@@ -5,6 +5,7 @@ export default function Sidebar({
   onSizeChange,
   onAlbumSizeChange,
   albumSize,
+  onDownload,
 }) {
   const handleSizeChange = (width, height) => {
     onSizeChange({ width, height });
@@ -32,6 +33,7 @@ export default function Sidebar({
           />
         </Stack>
       </div>
+      <button onClick={onDownload}>Download Wallpaper</button>
     </div>
   );
 }

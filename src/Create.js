@@ -20,6 +20,7 @@ export default function Create() {
   useEffect(() => {
     if (image) {
       const img = new Image();
+      img.crossOrigin = "anonymous";
       img.onload = () => {
         imageRef.current = img;
         drawImage();
@@ -49,6 +50,17 @@ export default function Create() {
   useEffect(() => {
     drawImage();
   }, [canvasSize, albumSize]);
+
+  const handleDownload = () => {
+    if (canvasRef.current) {
+      const canvas = canvasRef.current;
+      const image = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.download = "album-wallpaper.png";
+      link.href = image;
+      link.click();
+    }
+  };
 
   const handleSizeChange = (newSize) => {
     setCanvasSize(newSize);
@@ -84,6 +96,7 @@ export default function Create() {
         onSizeChange={handleSizeChange}
         onAlbumSizeChange={handleAlbumSizeChange}
         albumSize={albumSize}
+        onDownload={handleDownload}
       />
     </div>
   );
