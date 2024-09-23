@@ -3,9 +3,12 @@ import React, { useState } from "react";
 
 export default function Sidebar({ onSizeChange }) {
   const [sidebarToggle, setSidebarToggle] = useState(0);
-
+  const [albumSize, setAlbumSize] = useState(100);
   const handleSizeChange = (width, height) => {
     onSizeChange({ width, height });
+    const handleSliderChange = (event, newValue) => {
+      setAlbumSize(newValue);
+    };
   };
 
   return (
@@ -31,9 +34,15 @@ export default function Sidebar({ onSizeChange }) {
               direction="row"
               sx={{ alignItems: "center", mb: 1 }}
             >
-              <Slider aria-label="Volume" />
+              <p>AlbumSize</p>
+              <Slider
+                aria-label="AlbumSize"
+                value={albumSize}
+                onChange={handleSizeChange}
+                min={50}
+                max={200}
+              />
             </Stack>
-            <Slider disabled defaultValue={30} aria-label="Disabled slider" />
           </div>
         </div>
       )}
