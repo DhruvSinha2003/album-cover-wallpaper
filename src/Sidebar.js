@@ -33,7 +33,9 @@ export default function Sidebar({
           />
         </Stack>
       </div>
-      <button onClick={onDownload}>Download Wallpaper</button>
+      <button onClick={onDownload} className="download-button">
+        Download Wallpaper
+      </button>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { IconContext } from "react-icons";
 import { MdArrowBackIosNew } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -11,25 +11,14 @@ export default function Create() {
   const [albumSize, setAlbumSize] = useState(100);
   const canvasRef = useRef(null);
   const imageRef = useRef(null);
+  const containerRef = useRef(null);
   let navigate = useNavigate();
 
   const handleBack = () => {
     navigate("/");
   };
 
-  useEffect(() => {
-    if (image) {
-      const img = new Image();
-      img.crossOrigin = "anonymous";
-      img.onload = () => {
-        imageRef.current = img;
-        drawImage();
-      };
-      img.src = image;
-    }
-  }, [image]);
-
-  const drawImage = () => {
+  const drawImage = useCallback(() => {
     if (canvasRef.current && imageRef.current) {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
@@ -45,11 +34,53 @@ export default function Create() {
       const y = (canvas.height - newHeight) / 2;
       ctx.drawImage(img, x, y, newWidth, newHeight);
     }
-  };
+  }, [albumSize]);
+
+  const adjustCanvasSize = useCallback(() => {
+    if (containerRef.current && canvasRef.current) {
+      const container = containerRef.current;
+      const canvas = canvasRef.current;
+      const containerWidth = container.clientWidth;
+      const containerHeight = container.clientHeight;
+      const canvasAspectRatio = canvasSize.width / canvasSize.height;
+      const containerAspectRatio = containerWidth / containerHeight;
+
+      let newWidth, newHeight;
+
+      if (canvasAspectRatio > containerAspectRatio) {
+        newWidth = containerWidth;
+        newHeight = containerWidth / canvasAspectRatio;
+      } else {
+        newHeight = containerHeight;
+        newWidth = containerHeight * canvasAspectRatio;
+      }
+
+      canvas.style.width = `${newWidth}px`;
+      canvas.style.height = `${newHeight}px`;
+    }
+  }, [canvasSize.width, canvasSize.height]);
+
+  useEffect(() => {
+    if (image) {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => {
+        imageRef.current = img;
+        drawImage();
+      };
+      img.src = image;
+    }
+  }, [image, drawImage]);
 
   useEffect(() => {
     drawImage();
-  }, [canvasSize, albumSize]);
+    adjustCanvasSize();
+  }, [canvasSize, albumSize, drawImage, adjustCanvasSize]);
+
+  useEffect(() => {
+    window.addEventListener("resize", adjustCanvasSize);
+    return () => window.removeEventListener("resize", adjustCanvasSize);
+  }, [adjustCanvasSize]);
 
   const handleDownload = () => {
     if (canvasRef.current) {
@@ -71,8 +102,8 @@ export default function Create() {
   };
 
   return (
-    <div style={{ display: "flex" }}>
-      <div style={{ flex: 1 }}>
+    <div style={{ display: "flex", height: "100vh" }}>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
         <div className="top-bar">
           <IconContext.Provider value={{ size: "1.3em" }}>
             <div className="back-button" onClick={handleBack}>
@@ -81,16 +112,28 @@ export default function Create() {
           </IconContext.Provider>
           <h1>Create Wallpaper</h1>
         </div>
-        <canvas
-          ref={canvasRef}
-          width={canvasSize.width}
-          height={canvasSize.height}
+        <div
+          ref={containerRef}
           style={{
-            border: "1px solid black",
-            maxWidth: "100%",
-            height: "auto",
+            flex: 1,
+            overflow: "hidden",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
-        />
+        >
+          <canvas
+            ref={canvasRef}
+            width={canvasSize.width}
+            height={canvasSize.height}
+            style={{
+              border: "1px solid black",
+              maxWidth: "100%",
+              maxHeight: "100%",
+              objectFit: "contain",
+            }}
+          />
+        </div>
       </div>
       <Sidebar
         onSizeChange={handleSizeChange}
