@@ -102,15 +102,15 @@ export default function Create() {
 
   return (
     <div className="create-container">
-      <div className="top-bar">
-        <IconContext.Provider value={{ size: "1.3em" }}>
-          <div className="back-button" onClick={handleBack}>
-            <MdArrowBackIosNew />
-          </div>
-        </IconContext.Provider>
-        <h1>Create Wallpaper</h1>
-      </div>
-      <div className="content-wrapper">
+      <div className="main-content">
+        <div className="top-bar">
+          <IconContext.Provider value={{ size: "1.3em" }}>
+            <div className="back-button" onClick={handleBack}>
+              <MdArrowBackIosNew />
+            </div>
+          </IconContext.Provider>
+          <h1>Create Wallpaper</h1>
+        </div>
         <div className="canvas-container" ref={containerRef}>
           <canvas
             ref={canvasRef}
@@ -118,14 +118,14 @@ export default function Create() {
             height={canvasSize.height}
           />
         </div>
-        <div className="sidebar-wrapper">
-          <Sidebar
-            onSizeChange={handleSizeChange}
-            onAlbumSizeChange={handleAlbumSizeChange}
-            albumSize={albumSize}
-            onDownload={handleDownload}
-          />
-        </div>
+      </div>
+      <div className="sidebar-wrapper">
+        <Sidebar
+          onSizeChange={handleSizeChange}
+          onAlbumSizeChange={handleAlbumSizeChange}
+          albumSize={albumSize}
+          onDownload={handleDownload}
+        />
       </div>
     </div>
   );
