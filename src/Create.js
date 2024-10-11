@@ -24,7 +24,6 @@ export default function Create() {
       const ctx = canvas.getContext("2d");
       const img = imageRef.current;
 
-      // Clear the canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const scaleFactor = albumSize / 100;
@@ -102,45 +101,32 @@ export default function Create() {
   };
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
-      <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-        <div className="top-bar">
-          <IconContext.Provider value={{ size: "1.3em" }}>
-            <div className="back-button" onClick={handleBack}>
-              <MdArrowBackIosNew />
-            </div>
-          </IconContext.Provider>
-          <h1>Create Wallpaper</h1>
-        </div>
-        <div
-          ref={containerRef}
-          style={{
-            flex: 1,
-            overflow: "hidden",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+    <div className="create-container">
+      <div className="top-bar">
+        <IconContext.Provider value={{ size: "1.3em" }}>
+          <div className="back-button" onClick={handleBack}>
+            <MdArrowBackIosNew />
+          </div>
+        </IconContext.Provider>
+        <h1>Create Wallpaper</h1>
+      </div>
+      <div className="content-wrapper">
+        <div className="canvas-container" ref={containerRef}>
           <canvas
             ref={canvasRef}
             width={canvasSize.width}
             height={canvasSize.height}
-            style={{
-              border: "1px solid black",
-              maxWidth: "100%",
-              maxHeight: "100%",
-              objectFit: "contain",
-            }}
+          />
+        </div>
+        <div className="sidebar-wrapper">
+          <Sidebar
+            onSizeChange={handleSizeChange}
+            onAlbumSizeChange={handleAlbumSizeChange}
+            albumSize={albumSize}
+            onDownload={handleDownload}
           />
         </div>
       </div>
-      <Sidebar
-        onSizeChange={handleSizeChange}
-        onAlbumSizeChange={handleAlbumSizeChange}
-        albumSize={albumSize}
-        onDownload={handleDownload}
-      />
     </div>
   );
 }
