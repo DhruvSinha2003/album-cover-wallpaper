@@ -91,51 +91,53 @@ function Home() {
   };
 
   return (
-    <div className="container">
-      <h1>Album Cover Art</h1>
-      <input
-        type="text"
-        value={searchTerm}
-        onChange={handleInputChange}
-        placeholder="Enter Album Name"
-      />
+    <div className="outer-container">
+      <div className="container">
+        <h1>Album Cover Art</h1>
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={handleInputChange}
+          placeholder="Enter Album Name"
+        />
 
-      {suggestions.length > 0 && (
-        <ul className="suggestions-list">
-          {suggestions.map((suggestion) => (
-            <li
-              key={suggestion.id}
-              onClick={() => searchAlbum(suggestion.id)}
-              className="suggestion-item"
-            >
-              <img
-                src={suggestion.thumbnail}
-                alt={`${suggestion.name} thumbnail`}
-                className="suggestion-thumbnail"
-              />
-              <div className="suggestion-info">
-                <span className="suggestion-album">{suggestion.name}</span>
-                <span className="suggestion-artist">{suggestion.artist}</span>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+        {suggestions.length > 0 && (
+          <ul className="suggestions-list">
+            {suggestions.map((suggestion) => (
+              <li
+                key={suggestion.id}
+                onClick={() => searchAlbum(suggestion.id)}
+                className="suggestion-item"
+              >
+                <img
+                  src={suggestion.thumbnail}
+                  alt={`${suggestion.name} thumbnail`}
+                  className="suggestion-thumbnail"
+                />
+                <div className="suggestion-info">
+                  <span className="suggestion-album">{suggestion.name}</span>
+                  <span className="suggestion-artist">{suggestion.artist}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
 
-      {albumCover && (
-        <>
-          <img
-            src={albumCover}
-            alt="album cover"
-            className="home-album-cover"
-          />
-          <Link to="/create" state={{ image: albumCover }}>
-            <button className="create-wallpaper-button">
-              Create a wallpaper
-            </button>
-          </Link>
-        </>
-      )}
+        {albumCover && (
+          <>
+            <img
+              src={albumCover}
+              alt="album cover"
+              className="home-album-cover"
+            />
+            <Link to="/create" state={{ image: albumCover }}>
+              <button className="create-wallpaper-button">
+                Create a wallpaper
+              </button>
+            </Link>
+          </>
+        )}
+      </div>
     </div>
   );
 }
