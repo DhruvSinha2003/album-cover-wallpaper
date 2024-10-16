@@ -45,19 +45,6 @@ canvas {
   box-shadow: 0 0 20px rgba(187, 134, 252, 0.2);
 }
 
-.sidebar-wrapper {
-  width: 300px;
-  height: 100vh;
-  flex-shrink: 0;
-  overflow-y: auto;
-  border-left: 1px solid var(--border-color);
-  background-color: var(--bg-secondary);
-}
-
-.sidebar {
-  padding: 20px;
-}
-
 .back-button {
   display: flex;
   justify-content: center;
@@ -74,69 +61,6 @@ canvas {
 .back-button:hover {
   background-color: var(--accent-primary);
   color: var(--bg-primary);
-}
-
-.download-button {
-  margin-top: 20px;
-  width: 100%;
-  padding: 12px;
-  background-color: var(--accent-primary);
-  color: var(--bg-primary);
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
-
-.download-button:hover {
-  background-color: var(--accent-secondary);
-}
-
-.sliders {
-  margin-top: 20px;
-}
-
-.slider-container {
-  margin-bottom: 20px;
-}
-
-.slider-container label {
-  display: block;
-  margin-bottom: 8px;
-  color: var(--text-secondary);
-}
-
-.slider-container input[type="range"] {
-  width: 100%;
-  -webkit-appearance: none;
-  background: var(--bg-tertiary);
-  outline: none;
-  opacity: 0.7;
-  transition: opacity 0.2s;
-}
-
-.slider-container input[type="range"]:hover {
-  opacity: 1;
-}
-
-.slider-container input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  background: var(--accent-primary);
-  cursor: pointer;
-  border-radius: 50%;
-}
-
-.slider-container input[type="range"]::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  background: var(--accent-primary);
-  cursor: pointer;
-  border-radius: 50%;
 }
 
 @media (max-width: 768px) {

@@ -1,5 +1,9 @@
+import CropSquareIcon from "@mui/icons-material/CropSquare";
+import DesktopWindowsIcon from "@mui/icons-material/DesktopWindows";
+import SmartphoneIcon from "@mui/icons-material/Smartphone";
 import { Slider, Stack } from "@mui/material";
 import React from "react";
+import "./Sidebar.css";
 
 export default function Sidebar({
   onSizeChange,
@@ -18,9 +22,27 @@ export default function Sidebar({
   return (
     <div className="sidebar">
       <h3>Canvas Size</h3>
-      <button onClick={() => handleSizeChange(1920, 1080)}>1920x1080</button>
-      <button onClick={() => handleSizeChange(1080, 1080)}>1080x1080</button>
-      <button onClick={() => handleSizeChange(1080, 2400)}>1080x2400</button>
+      <button
+        className="canvas-size-button"
+        onClick={() => handleSizeChange(1920, 1080)}
+      >
+        <DesktopWindowsIcon fontSize="large" />
+        <span>1920x1080</span>
+      </button>
+      <button
+        className="canvas-size-button"
+        onClick={() => handleSizeChange(1080, 1080)}
+      >
+        <CropSquareIcon fontSize="large" />
+        <span>1080x1080</span>
+      </button>
+      <button
+        className="canvas-size-button"
+        onClick={() => handleSizeChange(1080, 2400)}
+      >
+        <SmartphoneIcon fontSize="large" />
+        <span>1080x2400</span>
+      </button>
       <div className="sliders">
         <Stack spacing={2} direction="row" sx={{ alignItems: "center", mb: 1 }}>
           <p>Album Size</p>
@@ -29,7 +51,7 @@ export default function Sidebar({
             value={albumSize}
             onChange={handleSliderChange}
             min={50}
-            max={200}
+            max={170}
           />
         </Stack>
       </div>
