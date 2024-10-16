@@ -3,6 +3,7 @@ import { IconContext } from "react-icons";
 import { MdArrowBackIosNew } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
+import "./Create.css"
 
 export default function Create() {
   const location = useLocation();
