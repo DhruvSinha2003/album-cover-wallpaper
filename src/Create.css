@@ -16,13 +16,13 @@
   align-items: center;
   gap: 20px;
   padding: 15px 20px;
-  height: 70px;
+  height: 10%px;
   border-bottom: 1px solid var(--border-color);
   background-color: var(--bg-secondary);
 }
 
 .top-bar h1 {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   color: var(--accent-primary);
   margin: 0;
 }
