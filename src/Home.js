@@ -97,7 +97,10 @@ function Home() {
 
   return (
     <div className="home-container">
-      <div className="home-content">
+      <div
+        className="home-content"
+        style={{ marginTop: albumCover ? "0" : "10%" }}
+      >
         <h1>Album Cover Art</h1>
         <div className="search-wrapper">
           <div className="search-container">
