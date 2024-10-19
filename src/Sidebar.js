@@ -1,8 +1,9 @@
 import CropSquareIcon from "@mui/icons-material/CropSquare";
 import DesktopWindowsIcon from "@mui/icons-material/DesktopWindows";
 import SmartphoneIcon from "@mui/icons-material/Smartphone";
-import { Slider, Stack } from "@mui/material";
-import React from "react";
+import { FormControlLabel, Slider, Stack, Switch } from "@mui/material";
+import debounce from "lodash/debounce";
+import React, { useCallback, useState } from "react";
 import "./Sidebar.css";
 
 export default function Sidebar({
@@ -10,13 +11,44 @@ export default function Sidebar({
   onAlbumSizeChange,
   albumSize,
   onDownload,
+  onGradientToggle,
+  onGradientAngleChange,
+  useGradient,
+  gradientAngle,
 }) {
+  const [localAlbumSize, setLocalAlbumSize] = useState(albumSize);
+  const [localGradientAngle, setLocalGradientAngle] = useState(gradientAngle);
+
   const handleSizeChange = (width, height) => {
     onSizeChange({ width, height });
   };
 
+  const debouncedAlbumSizeChange = useCallback(
+    debounce((newValue) => {
+      onAlbumSizeChange(newValue);
+    }, 100),
+    [onAlbumSizeChange]
+  );
+
   const handleSliderChange = (event, newValue) => {
-    onAlbumSizeChange(newValue);
+    setLocalAlbumSize(newValue);
+    debouncedAlbumSizeChange(newValue);
+  };
+
+  const handleGradientToggle = (event) => {
+    onGradientToggle(event.target.checked);
+  };
+
+  const debouncedGradientAngleChange = useCallback(
+    debounce((newValue) => {
+      onGradientAngleChange(newValue);
+    }, 100),
+    [onGradientAngleChange]
+  );
+
+  const handleGradientAngleChange = (event, newValue) => {
+    setLocalGradientAngle(newValue);
+    debouncedGradientAngleChange(newValue);
   };
 
   return (
@@ -48,12 +80,38 @@ export default function Sidebar({
           <p>Album Size</p>
           <Slider
             aria-label="AlbumSize"
-            value={albumSize}
+            value={localAlbumSize}
             onChange={handleSliderChange}
             min={50}
             max={170}
           />
         </Stack>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={useGradient}
+              onChange={handleGradientToggle}
+              name="gradientToggle"
+            />
+          }
+          label="Use Gradient Background"
+        />
+        {useGradient && (
+          <Stack
+            spacing={2}
+            direction="row"
+            sx={{ alignItems: "center", mt: 1 }}
+          >
+            <p>Gradient Angle</p>
+            <Slider
+              aria-label="GradientAngle"
+              value={localGradientAngle}
+              onChange={handleGradientAngleChange}
+              min={0}
+              max={360}
+            />
+          </Stack>
+        )}
       </div>
       <button onClick={onDownload} className="download-button">
         Download Wallpaper
