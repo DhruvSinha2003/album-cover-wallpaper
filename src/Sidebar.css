@@ -11,68 +11,28 @@
   padding: 20px;
 }
 
-.download-button {
-  margin-top: 20px;
-  width: 100%;
-  padding: 12px;
-  background-color: var(--accent-primary);
-  color: var(--bg-primary);
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+.sidebar-section {
+  margin-bottom: 24px;
+}
+
+.sidebar h3 {
+  color: var(--text-primary);
+  margin-bottom: 16px;
   font-size: 16px;
   font-weight: bold;
-  transition: background-color 0.3s ease;
 }
 
-.download-button:hover {
-  background-color: var(--accent-secondary);
-}
-
-.sliders {
-  margin-top: 20px;
-  width: 90%;
-}
-
-.slider-container {
-  margin-bottom: 20px;
-}
-
-.slider-container label {
-  display: block;
-  margin-bottom: 8px;
+.sidebar h4 {
   color: var(--text-secondary);
+  margin: 16px 0 8px 0;
+  font-size: 14px;
+  font-weight: bold;
 }
 
-.slider-container input[type="range"] {
-  width: 100%;
-  -webkit-appearance: none;
-  background: var(--bg-tertiary);
-  outline: none;
-  opacity: 0.7;
-  transition: opacity 0.2s;
-}
-
-.slider-container input[type="range"]:hover {
-  opacity: 1;
-}
-
-.slider-container input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  background: var(--accent-primary);
-  cursor: pointer;
-  border-radius: 50%;
-}
-
-.slider-container input[type="range"]::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  background: var(--accent-primary);
-  cursor: pointer;
-  border-radius: 50%;
+.canvas-size-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .canvas-size-button {
@@ -80,7 +40,6 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px;
-  margin-top: 10px;
   width: 100%;
   background-color: var(--bg-primary);
   border: 1px solid var(--border-color);
@@ -98,4 +57,76 @@
 
 .canvas-size-button span {
   margin-left: 10px;
+}
+
+.sliders {
+  margin-top: 20px;
+  width: 90%;
+}
+
+.slider-container {
+  margin-bottom: 20px;
+}
+
+.slider-container label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-secondary);
+}
+
+.angle-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.angle-button {
+  padding: 8px;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text-primary);
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.angle-button:hover {
+  background-color: var(--bg-secondary);
+}
+
+.angle-button.active {
+  background-color: var(--accent-primary);
+  color: var(--bg-primary);
+  border-color: var(--accent-primary);
+}
+
+.color-picker-container {
+  margin-top: 16px;
+}
+
+.color-picker {
+  width: 100% !important;
+  margin-top: 8px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.download-button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  background-color: var(--accent-primary);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.download-button:hover {
+  background-color: var(--accent-secondary);
 }

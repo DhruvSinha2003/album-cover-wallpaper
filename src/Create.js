@@ -2,10 +2,13 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { IconContext } from "react-icons";
 import { MdArrowBackIosNew } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
+import BackgroundControls from "./BackgroundControls";
 import "./Create.css";
 import Sidebar from "./Sidebar";
+import { createGradient, extractDistinctColors } from "./gradientUtils";
 
 export default function Create() {
+  const [solidColor, setSolidColor] = useState("#f0f0f0");
   const location = useLocation();
   const { image } = location.state || {};
   const [canvasSize, setCanvasSize] = useState({ width: 1920, height: 1080 });
@@ -80,12 +83,18 @@ export default function Create() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       if (useGradient) {
-        drawGradient();
+        const gradient = createGradient(
+          ctx,
+          canvas.width,
+          canvas.height,
+          dominantColors,
+          gradientAngle
+        );
+        ctx.fillStyle = gradient;
       } else {
-        // Fill with a neutral color when not using gradient
-        ctx.fillStyle = "#f0f0f0";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = solidColor;
       }
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       const scaleFactor = albumSize / 100;
       const newWidth = img.width * scaleFactor;
@@ -94,7 +103,7 @@ export default function Create() {
       const y = (canvas.height - newHeight) / 2;
       ctx.drawImage(img, x, y, newWidth, newHeight);
     }
-  }, [albumSize, useGradient, drawGradient]);
+  }, [albumSize, useGradient, gradientAngle, dominantColors, solidColor]);
 
   useEffect(() => {
     if (image) {
@@ -102,13 +111,24 @@ export default function Create() {
       img.crossOrigin = "anonymous";
       img.onload = () => {
         imageRef.current = img;
-        const colors = extractDominantColors(img);
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+        const imageData = ctx.getImageData(
+          0,
+          0,
+          canvas.width,
+          canvas.height
+        ).data;
+        const colors = extractDistinctColors(imageData);
         setDominantColors(colors);
         drawImage();
       };
       img.src = image;
     }
-  }, [image, drawImage, extractDominantColors]);
+  }, [image, drawImage]);
 
   const adjustCanvasSize = useCallback(() => {
     if (containerRef.current && canvasRef.current) {
@@ -207,6 +227,8 @@ export default function Create() {
           onGradientAngleChange={handleGradientAngleChange}
           useGradient={useGradient}
           gradientAngle={gradientAngle}
+          solidColor={solidColor}
+          onSolidColorChange={setSolidColor}
         />
       </div>
     </div>

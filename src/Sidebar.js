@@ -4,6 +4,7 @@ import SmartphoneIcon from "@mui/icons-material/Smartphone";
 import { FormControlLabel, Slider, Stack, Switch } from "@mui/material";
 import debounce from "lodash/debounce";
 import React, { useCallback, useState } from "react";
+import { HexColorPicker } from "react-colorful";
 import "./Sidebar.css";
 
 export default function Sidebar({
@@ -15,9 +16,11 @@ export default function Sidebar({
   onGradientAngleChange,
   useGradient,
   gradientAngle,
+  solidColor,
+  onSolidColorChange,
 }) {
   const [localAlbumSize, setLocalAlbumSize] = useState(albumSize);
-  const [localGradientAngle, setLocalGradientAngle] = useState(gradientAngle);
+  const angleOptions = [0, 45, 90, 135, 180, 225, 270, 315];
 
   const handleSizeChange = (width, height) => {
     onSizeChange({ width, height });
@@ -39,45 +42,38 @@ export default function Sidebar({
     onGradientToggle(event.target.checked);
   };
 
-  const debouncedGradientAngleChange = useCallback(
-    debounce((newValue) => {
-      onGradientAngleChange(newValue);
-    }, 100),
-    [onGradientAngleChange]
-  );
-
-  const handleGradientAngleChange = (event, newValue) => {
-    setLocalGradientAngle(newValue);
-    debouncedGradientAngleChange(newValue);
-  };
-
   return (
     <div className="sidebar">
-      <h3>Canvas Size</h3>
-      <button
-        className="canvas-size-button"
-        onClick={() => handleSizeChange(1920, 1080)}
-      >
-        <DesktopWindowsIcon fontSize="large" />
-        <span>1920x1080</span>
-      </button>
-      <button
-        className="canvas-size-button"
-        onClick={() => handleSizeChange(1080, 1080)}
-      >
-        <CropSquareIcon fontSize="large" />
-        <span>1080x1080</span>
-      </button>
-      <button
-        className="canvas-size-button"
-        onClick={() => handleSizeChange(1080, 2400)}
-      >
-        <SmartphoneIcon fontSize="large" />
-        <span>1080x2400</span>
-      </button>
-      <div className="sliders">
+      <section className="sidebar-section">
+        <h3>Canvas Size</h3>
+        <div className="canvas-size-buttons">
+          <button
+            className="canvas-size-button"
+            onClick={() => handleSizeChange(1920, 1080)}
+          >
+            <DesktopWindowsIcon fontSize="large" />
+            <span>1920x1080</span>
+          </button>
+          <button
+            className="canvas-size-button"
+            onClick={() => handleSizeChange(1080, 1080)}
+          >
+            <CropSquareIcon fontSize="large" />
+            <span>1080x1080</span>
+          </button>
+          <button
+            className="canvas-size-button"
+            onClick={() => handleSizeChange(1080, 2400)}
+          >
+            <SmartphoneIcon fontSize="large" />
+            <span>1080x2400</span>
+          </button>
+        </div>
+      </section>
+
+      <section className="sidebar-section">
+        <h3>Album Size</h3>
         <Stack spacing={2} direction="row" sx={{ alignItems: "center", mb: 1 }}>
-          <p>Album Size</p>
           <Slider
             aria-label="AlbumSize"
             value={localAlbumSize}
@@ -86,6 +82,10 @@ export default function Sidebar({
             max={170}
           />
         </Stack>
+      </section>
+
+      <section className="sidebar-section">
+        <h3>Background</h3>
         <FormControlLabel
           control={
             <Switch
@@ -96,23 +96,36 @@ export default function Sidebar({
           }
           label="Use Gradient Background"
         />
-        {useGradient && (
-          <Stack
-            spacing={2}
-            direction="row"
-            sx={{ alignItems: "center", mt: 1 }}
-          >
-            <p>Gradient Angle</p>
-            <Slider
-              aria-label="GradientAngle"
-              value={localGradientAngle}
-              onChange={handleGradientAngleChange}
-              min={0}
-              max={360}
+
+        {useGradient ? (
+          <div className="gradient-controls">
+            <h4>Gradient Angle</h4>
+            <div className="angle-buttons">
+              {angleOptions.map((angle) => (
+                <button
+                  key={angle}
+                  className={`angle-button ${
+                    gradientAngle === angle ? "active" : ""
+                  }`}
+                  onClick={() => onGradientAngleChange(angle)}
+                >
+                  {angle}°
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="color-picker-container">
+            <h4>Background Color</h4>
+            <HexColorPicker
+              color={solidColor}
+              onChange={onSolidColorChange}
+              className="color-picker"
             />
-          </Stack>
+          </div>
         )}
-      </div>
+      </section>
+
       <button onClick={onDownload} className="download-button">
         Download Wallpaper
       </button>
