@@ -15,10 +15,22 @@ export default function Create() {
   const [useGradient, setUseGradient] = useState(false);
   const [gradientAngle, setGradientAngle] = useState(45);
   const [dominantColors, setDominantColors] = useState([]);
-  const [dropShadow, setDropShadow] = useState({ intensity: 0 });
+  const [dropShadow, setDropShadow] = useState({
+    intensity: 0,
+    config: {
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+      blur: 20,
+      mode: "uniform",
+    },
+  });
   const [customGradient, setCustomGradient] = useState({
     color1: "#ffffff",
     color2: "#000000",
+    color3: "#808080",
+    color4: "#404040",
     angle: 45,
   });
 
@@ -31,6 +43,41 @@ export default function Create() {
     navigate("/");
   };
 
+  const applyShadowEffect = (ctx, shadowConfig) => {
+    const { mode, top, right, bottom, left, blur, intensity } = shadowConfig;
+
+    if (mode === "uniform" && intensity > 0) {
+      ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+      ctx.shadowBlur = intensity * 0.5;
+      ctx.shadowOffsetX = intensity * 0.2;
+      ctx.shadowOffsetY = intensity * 0.2;
+    } else if (mode === "custom" || mode === "directional") {
+      ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+      ctx.shadowBlur = blur;
+
+      if (top > 0) ctx.shadowOffsetY = -top * 0.2;
+      if (bottom > 0) ctx.shadowOffsetY = bottom * 0.2;
+      if (left > 0) ctx.shadowOffsetX = -left * 0.2;
+      if (right > 0) ctx.shadowOffsetX = right * 0.2;
+    }
+  };
+
+  const createCustomGradient = (ctx, canvas, customGradient) => {
+    const gradient = ctx.createConicGradient(
+      (customGradient.angle * Math.PI) / 180,
+      canvas.width / 2,
+      canvas.height / 2
+    );
+
+    gradient.addColorStop(0, customGradient.color1);
+    gradient.addColorStop(0.25, customGradient.color2);
+    gradient.addColorStop(0.5, customGradient.color3);
+    gradient.addColorStop(0.75, customGradient.color4);
+    gradient.addColorStop(1, customGradient.color1);
+
+    return gradient;
+  };
+
   const drawImage = useCallback(() => {
     if (canvasRef.current && imageRef.current) {
       const canvas = canvasRef.current;
@@ -39,26 +86,37 @@ export default function Create() {
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+      // Reset shadow effects
+      ctx.shadowColor = "transparent";
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
+
       if (useGradient) {
-        const gradient = createGradient(
-          ctx,
-          canvas.width,
-          canvas.height,
-          dominantColors,
-          gradientAngle
-        );
-        ctx.fillStyle = gradient;
+        if (customGradient.color1) {
+          // Apply custom fancy gradient
+          const gradient = createCustomGradient(ctx, canvas, customGradient);
+          ctx.fillStyle = gradient;
+        } else {
+          // Apply auto gradient based on dominant colors
+          const gradient = createGradient(
+            ctx,
+            canvas.width,
+            canvas.height,
+            dominantColors,
+            gradientAngle
+          );
+          ctx.fillStyle = gradient;
+        }
       } else {
         ctx.fillStyle = solidColor;
       }
+
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Apply drop shadow if intensity > 0
-      if (dropShadow.intensity > 0) {
-        ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
-        ctx.shadowBlur = dropShadow.intensity * 0.5;
-        ctx.shadowOffsetX = dropShadow.intensity * 0.2;
-        ctx.shadowOffsetY = dropShadow.intensity * 0.2;
+      // Apply shadow effect before drawing the image
+      if (dropShadow.config) {
+        applyShadowEffect(ctx, dropShadow.config);
       }
 
       const scaleFactor = albumSize / 100;
@@ -68,7 +126,7 @@ export default function Create() {
       const y = (canvas.height - newHeight) / 2;
       ctx.drawImage(img, x, y, newWidth, newHeight);
 
-      // Reset shadow effects
+      // Reset shadow effects after drawing
       ctx.shadowColor = "transparent";
       ctx.shadowBlur = 0;
       ctx.shadowOffsetX = 0;
@@ -81,6 +139,7 @@ export default function Create() {
     dominantColors,
     solidColor,
     dropShadow,
+    customGradient,
   ]);
 
   useEffect(() => {

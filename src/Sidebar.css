@@ -1,132 +1,158 @@
-.sidebar-wrapper {
-  width: 300px;
-  height: 100vh;
-  flex-shrink: 0;
-  overflow-y: auto;
-  border-left: 1px solid var(--border-color);
-  background-color: var(--bg-secondary);
-}
-
+/* Updated Sidebar Styles */
 .sidebar {
   padding: 20px;
-}
-
-.sidebar-section {
-  margin-bottom: 24px;
-}
-
-.sidebar h3 {
   color: var(--text-primary);
-  margin-bottom: 16px;
-  font-size: 16px;
-  font-weight: bold;
 }
 
-.sidebar h4 {
-  color: var(--text-secondary);
-  margin: 16px 0 8px 0;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.canvas-size-buttons {
+/* Background Type Buttons */
+.background-type-buttons {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
-
-.canvas-size-button {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px;
-  width: 100%;
-  background-color: var(--bg-primary);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  color: var(--text-primary);
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.canvas-size-button:hover {
-  background-color: var(--bg-secondary);
-}
-
-.canvas-size-button span {
-  margin-left: 10px;
-}
-
-.sliders {
-  margin-top: 20px;
-  width: 90%;
-}
-
-.slider-container {
-  margin-bottom: 20px;
-}
-
-.slider-container label {
-  display: block;
-  margin-bottom: 8px;
-  color: var(--text-secondary);
-}
-
-.angle-buttons {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
   gap: 8px;
-  margin-top: 8px;
+  margin-bottom: 16px;
 }
 
-.angle-button {
-  padding: 8px;
-  background-color: var(--bg-primary);
-  border: 1px solid var(--border-color);
+.type-button {
+  padding: 12px;
+  border: 2px solid var(--border-color);
   border-radius: 8px;
+  background: var(--bg-primary);
   cursor: pointer;
-  color: var(--text-primary);
-  font-size: 14px;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
+  width: 100%;
 }
 
-.angle-button:hover {
-  background-color: var(--bg-secondary);
-}
-
-.angle-button.active {
-  background-color: var(--accent-primary);
-  color: var(--bg-primary);
+.type-button:hover {
   border-color: var(--accent-primary);
 }
 
-.color-picker-container {
+.type-button.active {
+  border-color: var(--accent-primary);
+  background: var(--bg-secondary);
+}
+
+.button-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.button-preview {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+
+/* Color Picker Popup */
+.color-picker-popup {
+  padding: 16px;
+  background: var(--bg-primary);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Custom Gradient Controls */
+.gradient-colors {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.color-preview {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: 2px solid var(--border-color);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.color-preview:hover {
+  transform: scale(1.1);
+}
+
+/* Shadow Controls */
+.shadow-controls {
   margin-top: 16px;
 }
 
-.color-picker {
-  width: 100% !important;
-  margin-top: 8px;
-  border-radius: 8px;
-  overflow: hidden;
+.shadow-mode-buttons {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
 }
 
-.download-button {
-  margin-top: 20px;
-  width: 100%;
-  padding: 12px;
-  background-color: var(--accent-primary);
-  color: var(--bg-primary);
-  border: none;
-  border-radius: 8px;
+.mode-button {
+  flex: 1;
+  padding: 8px;
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--bg-primary);
   cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
+  transition: all 0.2s ease;
 }
 
-.download-button:hover {
-  background-color: var(--accent-secondary);
+.mode-button.active {
+  border-color: var(--accent-primary);
+  background: var(--bg-secondary);
+}
+
+.custom-shadow-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.shadow-slider {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.directional-shadow-control {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.shadow-direction-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: 120px;
+  height: 120px;
+}
+
+.direction-button {
+  padding: 8px;
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--bg-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.direction-button.active {
+  border-color: var(--accent-primary);
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+}
+
+/* Position the direction buttons */
+.shadow-direction-pad .direction-button:nth-child(1) {
+  grid-column: 2;
+  grid-row: 1;
+}
+.shadow-direction-pad .direction-button:nth-child(2) {
+  grid-column: 3;
+  grid-row: 2;
+}
+.shadow-direction-pad .direction-button:nth-child(3) {
+  grid-column: 2;
+  grid-row: 3;
+}
+.shadow-direction-pad .direction-button:nth-child(4) {
+  grid-column: 1;
+  grid-row: 2;
 }
