@@ -160,11 +160,19 @@ export default function Sidebar({
               className={`type-button ${
                 backgroundType === type ? "active" : ""
               }`}
-              onClick={(e) => {
+              onClick={() => {
                 setBackgroundType(type);
                 onGradientToggle(type !== "solid");
-                if (type === "solid") {
-                  handleColorPickerClick(e, "solid");
+                if (type === "customGradient") {
+                  onCustomGradientChange({
+                    ...customGradient,
+                    isCustom: true,
+                  });
+                } else if (type === "gradient") {
+                  onCustomGradientChange({
+                    ...customGradient,
+                    isCustom: false,
+                  });
                 }
               }}
             >
@@ -174,7 +182,7 @@ export default function Sidebar({
                   style={{
                     background:
                       type === "customGradient"
-                        ? createFancyGradient(customColors)
+                        ? `linear-gradient(${customGradient.angle}deg, ${customGradient.color1}, ${customGradient.color2}, ${customGradient.color3}, ${customGradient.color4})`
                         : type === "gradient"
                         ? `linear-gradient(${gradientAngle}deg, #FF5733, #33FF57)`
                         : solidColor,
@@ -182,7 +190,7 @@ export default function Sidebar({
                 />
                 <span>
                   {type === "customGradient"
-                    ? "Fancy Gradient"
+                    ? "Custom Gradient"
                     : type === "gradient"
                     ? "Auto Gradient"
                     : "Solid Color"}
@@ -191,70 +199,67 @@ export default function Sidebar({
             </button>
           ))}
         </div>
-
-        {/* Color Pickers */}
-        <Popover
-          open={Boolean(colorPickerAnchor)}
-          anchorEl={colorPickerAnchor}
-          onClose={handleColorPickerClose}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "center",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "center",
-          }}
-        >
-          <div className="color-picker-popup">
-            {activeColorPicker === "solid" ? (
-              <HexColorPicker
-                color={solidColor}
-                onChange={onSolidColorChange}
-              />
-            ) : activeColorPicker?.startsWith("color") ? (
-              <HexColorPicker
-                color={customColors[activeColorPicker]}
-                onChange={(color) => {
-                  setCustomColors((prev) => ({
-                    ...prev,
-                    [activeColorPicker]: color,
-                  }));
-                }}
-              />
-            ) : null}
-          </div>
-        </Popover>
-
-        {/* Custom Gradient Controls */}
-        {backgroundType === "customGradient" && (
-          <div className="custom-gradient-controls">
-            <div className="gradient-colors">
-              {Object.entries(customColors).map(([key, color]) => (
-                <button
-                  key={key}
-                  className="color-preview"
-                  onClick={(e) => handleColorPickerClick(e, key)}
-                  style={{ backgroundColor: color }}
-                />
-              ))}
-            </div>
-            <Stack
-              spacing={2}
-              direction="row"
-              sx={{ alignItems: "center", mt: 1 }}
-            >
-              <span>Angle</span>
-              <Slider
-                value={gradientAngle}
-                onChange={(_, value) => debouncedGradientAngle(value)}
-                min={0}
-                max={360}
-              />
-            </Stack>
-          </div>
-        )}
       </section>
+
+      {/* Color Pickers */}
+      <Popover
+        open={Boolean(colorPickerAnchor)}
+        anchorEl={colorPickerAnchor}
+        onClose={handleColorPickerClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+      >
+        <div className="color-picker-popup">
+          {activeColorPicker === "solid" ? (
+            <HexColorPicker color={solidColor} onChange={onSolidColorChange} />
+          ) : activeColorPicker?.startsWith("color") ? (
+            <HexColorPicker
+              color={customColors[activeColorPicker]}
+              onChange={(color) => {
+                setCustomColors((prev) => ({
+                  ...prev,
+                  [activeColorPicker]: color,
+                }));
+              }}
+            />
+          ) : null}
+        </div>
+      </Popover>
+
+      {/* Custom Gradient Controls */}
+      {backgroundType === "customGradient" && (
+        <div className="custom-gradient-controls">
+          <div className="gradient-colors">
+            {Object.entries(customColors).map(([key, color]) => (
+              <button
+                key={key}
+                className="color-preview"
+                onClick={(e) => handleColorPickerClick(e, key)}
+                style={{ backgroundColor: color }}
+              />
+            ))}
+          </div>
+          <Stack
+            spacing={2}
+            direction="row"
+            sx={{ alignItems: "center", mt: 1 }}
+          >
+            <span>Angle</span>
+            <Slider
+              value={gradientAngle}
+              onChange={(_, value) => debouncedGradientAngle(value)}
+              min={0}
+              max={360}
+            />
+          </Stack>
+        </div>
+      )}
 
       {/* Shadow Effects Section */}
       <section className="sidebar-section">

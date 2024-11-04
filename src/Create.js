@@ -32,6 +32,7 @@ export default function Create() {
     color3: "#808080",
     color4: "#404040",
     angle: 45,
+    isCustom: false,
   });
 
   const canvasRef = useRef(null);
@@ -62,18 +63,18 @@ export default function Create() {
     }
   };
 
-  const createCustomGradient = (ctx, canvas, customGradient) => {
-    const gradient = ctx.createConicGradient(
-      (customGradient.angle * Math.PI) / 180,
-      canvas.width / 2,
-      canvas.height / 2
+  const createCustomGradient = (ctx, canvas, colors, angle) => {
+    const gradient = ctx.createLinearGradient(
+      0,
+      0,
+      Math.cos((angle * Math.PI) / 180) * canvas.width,
+      Math.sin((angle * Math.PI) / 180) * canvas.height
     );
 
-    gradient.addColorStop(0, customGradient.color1);
-    gradient.addColorStop(0.25, customGradient.color2);
-    gradient.addColorStop(0.5, customGradient.color3);
-    gradient.addColorStop(0.75, customGradient.color4);
-    gradient.addColorStop(1, customGradient.color1);
+    gradient.addColorStop(0, colors.color1);
+    gradient.addColorStop(0.33, colors.color2);
+    gradient.addColorStop(0.66, colors.color3);
+    gradient.addColorStop(1, colors.color4);
 
     return gradient;
   };
@@ -93,9 +94,14 @@ export default function Create() {
       ctx.shadowOffsetY = 0;
 
       if (useGradient) {
-        if (customGradient.color1) {
-          // Apply custom fancy gradient
-          const gradient = createCustomGradient(ctx, canvas, customGradient);
+        if (customGradient.isCustom) {
+          // Apply custom gradient
+          const gradient = createCustomGradient(
+            ctx,
+            canvas,
+            customGradient,
+            customGradient.angle
+          );
           ctx.fillStyle = gradient;
         } else {
           // Apply auto gradient based on dominant colors
