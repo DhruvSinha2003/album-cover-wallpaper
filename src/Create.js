@@ -47,9 +47,12 @@ export default function Create() {
 
   const drawGuideLines = (ctx, width, height) => {
     ctx.save();
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
-    ctx.setLineDash([5, 5]);
-    ctx.lineWidth = 1;
+    ctx.strokeStyle = "rgba(0, 0, 0, 0.7)"; // Use a darker color for better visibility
+    ctx.setLineDash([10, 5]); // Change the dash pattern for better visibility
+    ctx.lineWidth = 2; // Increase the line width for more prominence
+    ctx.shadowColor = "rgba(255, 255, 255, 0.7)"; // Add a white shadow for contrast
+    ctx.shadowBlur = 2;
+
     // Vertical guides
     [0.25, 0.5, 0.75].forEach((percent) => {
       const x = width * percent;
@@ -70,7 +73,6 @@ export default function Create() {
 
     ctx.restore();
   };
-
   const handleMouseDown = (e) => {
     if (canvasRef.current && imageRef.current) {
       const canvas = canvasRef.current;
