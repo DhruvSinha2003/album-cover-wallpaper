@@ -1,22 +1,67 @@
-/* Updated Sidebar Styles */
+/* Sidebar.css */
 .sidebar {
+  width: 300px;
+  height: 100%;
+  overflow-y: auto;
+  background-color: var(--bg-secondary);
+  border-left: 1px solid var(--border-color);
   padding: 20px;
   color: var(--text-primary);
 }
 
-/* Background Type Buttons */
+.sidebar-section {
+  margin-bottom: 24px;
+}
+
+.sidebar-section h3 {
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  font-size: 1.1rem;
+}
+
+.canvas-size-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.canvas-size-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.canvas-size-button:hover {
+  border-color: var(--accent-primary);
+}
+
+.canvas-size-button span {
+  font-size: 0.8rem;
+}
+
 .background-type-buttons {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   margin-bottom: 16px;
 }
 
 .type-button {
+  display: flex;
+  align-items: center;
   padding: 12px;
   border: 2px solid var(--border-color);
   border-radius: 8px;
-  background: var(--bg-primary);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   cursor: pointer;
   transition: all 0.2s ease;
   width: 100%;
@@ -28,7 +73,7 @@
 
 .type-button.active {
   border-color: var(--accent-primary);
-  background: var(--bg-secondary);
+  background-color: var(--bg-tertiary);
 }
 
 .button-content {
@@ -41,15 +86,32 @@
   width: 24px;
   height: 24px;
   border-radius: 4px;
+  margin-right: 12px;
   border: 1px solid var(--border-color);
+}
+
+.download-button {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--accent-primary);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.download-button:hover {
+  background-color: var(--accent-secondary);
 }
 
 /* Color Picker Popup */
 .color-picker-popup {
   padding: 16px;
-  background: var(--bg-primary);
+  background-color: var(--bg-primary);
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Custom Gradient Controls */
@@ -155,4 +217,18 @@
 .shadow-direction-pad .direction-button:nth-child(4) {
   grid-column: 1;
   grid-row: 2;
+}
+
+@media (max-width: 768px) {
+  .create-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    max-height: 40vh;
+    border-left: none;
+    border-top: 1px solid var(--border-color);
+  }
 }

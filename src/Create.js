@@ -35,6 +35,182 @@ export default function Create() {
     isCustom: false,
   });
 
+  const [dragState, setDragState] = useState({
+    isDragging: false,
+    startX: 0,
+    startY: 0,
+    imageX: 0,
+    imageY: 0,
+  });
+
+  const [showGuides, setShowGuides] = useState(false);
+
+  const drawGuideLines = (ctx, width, height) => {
+    ctx.save();
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
+    ctx.setLineDash([5, 5]);
+    ctx.lineWidth = 1;
+    // Vertical guides
+    [0.25, 0.5, 0.75].forEach((percent) => {
+      const x = width * percent;
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, height);
+      ctx.stroke();
+    });
+
+    // Horizontal guides
+    [0.25, 0.5, 0.75].forEach((percent) => {
+      const y = height * percent;
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(width, y);
+      ctx.stroke();
+    });
+
+    ctx.restore();
+  };
+
+  const handleMouseDown = (e) => {
+    if (canvasRef.current && imageRef.current) {
+      const canvas = canvasRef.current;
+      const rect = canvas.getBoundingClientRect();
+      const x = (e.clientX - rect.left) * (canvas.width / rect.width);
+      const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+
+      // Check if click is within image bounds
+      const scaleFactor = albumSize / 100;
+      const imgWidth = imageRef.current.width * scaleFactor;
+      const imgHeight = imageRef.current.height * scaleFactor;
+      const imgX = (canvas.width - imgWidth) / 2 + dragState.imageX;
+      const imgY = (canvas.height - imgHeight) / 2 + dragState.imageY;
+
+      if (
+        x >= imgX &&
+        x <= imgX + imgWidth &&
+        y >= imgY &&
+        y <= imgY + imgHeight
+      ) {
+        setDragState({
+          isDragging: true,
+          startX: x,
+          startY: y,
+          imageX: dragState.imageX,
+          imageY: dragState.imageY,
+        });
+        setShowGuides(true);
+      }
+    }
+  };
+
+  const handleMouseMove = (e) => {
+    if (dragState.isDragging && canvasRef.current) {
+      const canvas = canvasRef.current;
+      const rect = canvas.getBoundingClientRect();
+      const x = (e.clientX - rect.left) * (canvas.width / rect.width);
+      const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+
+      const deltaX = x - dragState.startX;
+      const deltaY = y - dragState.startY;
+
+      setDragState((prev) => ({
+        ...prev,
+        imageX: prev.imageX + deltaX,
+        imageY: prev.imageY + deltaY,
+        startX: x,
+        startY: y,
+      }));
+
+      drawImage();
+    }
+  };
+
+  const handleMouseUp = () => {
+    setDragState((prev) => ({ ...prev, isDragging: false }));
+    setShowGuides(false);
+  };
+
+  const drawImage = useCallback(() => {
+    if (canvasRef.current && imageRef.current) {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext("2d");
+      const img = imageRef.current;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Reset shadow effects
+      ctx.shadowColor = "transparent";
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
+
+      if (useGradient) {
+        if (customGradient.isCustom) {
+          const gradient = ctx.createLinearGradient(
+            0,
+            0,
+            Math.cos((customGradient.angle * Math.PI) / 180) * canvas.width,
+            Math.sin((customGradient.angle * Math.PI) / 180) * canvas.height
+          );
+
+          gradient.addColorStop(0, customGradient.color1);
+          gradient.addColorStop(0.33, customGradient.color2);
+          gradient.addColorStop(0.66, customGradient.color3);
+          gradient.addColorStop(1, customGradient.color4);
+
+          ctx.fillStyle = gradient;
+        } else {
+          const gradient = createGradient(
+            ctx,
+            canvas.width,
+            canvas.height,
+            dominantColors,
+            gradientAngle
+          );
+          ctx.fillStyle = gradient;
+        }
+      } else {
+        ctx.fillStyle = solidColor;
+      }
+
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Apply shadow effect before drawing the image
+      if (dropShadow.config) {
+        applyShadowEffect(ctx, dropShadow.config);
+      }
+
+      const scaleFactor = albumSize / 100;
+      const newWidth = img.width * scaleFactor;
+      const newHeight = img.height * scaleFactor;
+      const x = (canvas.width - newWidth) / 2 + dragState.imageX;
+      const y = (canvas.height - newHeight) / 2 + dragState.imageY;
+
+      ctx.drawImage(img, x, y, newWidth, newHeight);
+
+      // Draw guides if dragging
+      if (showGuides) {
+        drawGuideLines(ctx, canvas.width, canvas.height);
+      }
+
+      // Reset shadow effects after drawing
+      ctx.shadowColor = "transparent";
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
+    }
+  }, [
+    albumSize,
+    useGradient,
+    gradientAngle,
+    dominantColors,
+    solidColor,
+    dropShadow,
+    customGradient,
+    dragState,
+    showGuides,
+  ]);
+
   const canvasRef = useRef(null);
   const imageRef = useRef(null);
   const containerRef = useRef(null);
@@ -78,75 +254,6 @@ export default function Create() {
 
     return gradient;
   };
-
-  const drawImage = useCallback(() => {
-    if (canvasRef.current && imageRef.current) {
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext("2d");
-      const img = imageRef.current;
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Reset shadow effects
-      ctx.shadowColor = "transparent";
-      ctx.shadowBlur = 0;
-      ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = 0;
-
-      if (useGradient) {
-        if (customGradient.isCustom) {
-          // Apply custom gradient
-          const gradient = createCustomGradient(
-            ctx,
-            canvas,
-            customGradient,
-            customGradient.angle
-          );
-          ctx.fillStyle = gradient;
-        } else {
-          // Apply auto gradient based on dominant colors
-          const gradient = createGradient(
-            ctx,
-            canvas.width,
-            canvas.height,
-            dominantColors,
-            gradientAngle
-          );
-          ctx.fillStyle = gradient;
-        }
-      } else {
-        ctx.fillStyle = solidColor;
-      }
-
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // Apply shadow effect before drawing the image
-      if (dropShadow.config) {
-        applyShadowEffect(ctx, dropShadow.config);
-      }
-
-      const scaleFactor = albumSize / 100;
-      const newWidth = img.width * scaleFactor;
-      const newHeight = img.height * scaleFactor;
-      const x = (canvas.width - newWidth) / 2;
-      const y = (canvas.height - newHeight) / 2;
-      ctx.drawImage(img, x, y, newWidth, newHeight);
-
-      // Reset shadow effects after drawing
-      ctx.shadowColor = "transparent";
-      ctx.shadowBlur = 0;
-      ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = 0;
-    }
-  }, [
-    albumSize,
-    useGradient,
-    gradientAngle,
-    dominantColors,
-    solidColor,
-    dropShadow,
-    customGradient,
-  ]);
 
   useEffect(() => {
     if (image) {
@@ -241,6 +348,10 @@ export default function Create() {
             ref={canvasRef}
             width={canvasSize.width}
             height={canvasSize.height}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
           />
         </div>
       </div>
@@ -255,11 +366,11 @@ export default function Create() {
           useGradient={useGradient}
           gradientAngle={gradientAngle}
           solidColor={solidColor}
-          onSolidColorChange={setSolidColor}
+          onSolidColorChange={setSolidColorChange}
           dropShadow={dropShadow}
-          onDropShadowChange={setDropShadow}
+          onDropShadowChange={setDropShadowChange}
           customGradient={customGradient}
-          onCustomGradientChange={setCustomGradient}
+          onCustomGradientChange={setCustomGradientChange}
         />
       </div>
     </div>
