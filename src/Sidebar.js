@@ -64,7 +64,6 @@ export default function Sidebar({
   // Update shadow configuration
   const handleShadowConfigChange = (config) => {
     setShadowConfig(config);
-    // Convert shadow config to the format expected by the main component
     const shadowIntensity =
       config.mode === "uniform"
         ? config.intensity
@@ -73,18 +72,6 @@ export default function Sidebar({
       intensity: shadowIntensity,
       config: config,
     });
-  };
-
-  // Create fancy gradient effect
-  const createFancyGradient = (colors) => {
-    return `conic-gradient(
-      from ${customGradient.angle}deg,
-      ${colors.color1} 0deg,
-      ${colors.color2} 90deg,
-      ${colors.color3} 180deg,
-      ${colors.color4} 270deg,
-      ${colors.color1} 360deg
-    )`;
   };
 
   // Create memoized debounced functions
@@ -105,6 +92,17 @@ export default function Sidebar({
       debouncedGradientAngle.cancel();
     };
   }, [debouncedAlbumSize, debouncedGradientAngle]);
+
+  // Update custom gradient when colors change
+  useEffect(() => {
+    if (backgroundType === "customGradient") {
+      onCustomGradientChange({
+        ...customGradient,
+        ...customColors,
+        isCustom: true,
+      });
+    }
+  }, [customColors, backgroundType, customGradient, onCustomGradientChange]);
 
   return (
     <div className="sidebar">
@@ -182,7 +180,7 @@ export default function Sidebar({
                   style={{
                     background:
                       type === "customGradient"
-                        ? `linear-gradient(${customGradient.angle}deg, ${customGradient.color1}, ${customGradient.color2}, ${customGradient.color3}, ${customGradient.color4})`
+                        ? `linear-gradient(${customGradient.angle}deg, ${customColors.color1}, ${customColors.color2}, ${customColors.color3}, ${customColors.color4})`
                         : type === "gradient"
                         ? `linear-gradient(${gradientAngle}deg, #FF5733, #33FF57)`
                         : solidColor,

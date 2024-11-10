@@ -4,7 +4,7 @@ import { MdArrowBackIosNew } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./Create.css";
 import Sidebar from "./Sidebar";
-import { createGradient, extractDistinctColors } from "./gradientUtils";
+import { createGradient, extractDistinctColors } from "./utils/gradientUtils";
 
 export default function Create() {
   const [solidColor, setSolidColor] = useState("#f0f0f0");
@@ -15,6 +15,14 @@ export default function Create() {
   const [useGradient, setUseGradient] = useState(false);
   const [gradientAngle, setGradientAngle] = useState(45);
   const [dominantColors, setDominantColors] = useState([]);
+  const [customGradient, setCustomGradient] = useState({
+    color1: "#FF5733",
+    color2: "#33FF57",
+    color3: "#3357FF",
+    color4: "#F033FF",
+    angle: 45,
+    isCustom: false,
+  });
   const [dropShadow, setDropShadow] = useState({
     intensity: 0,
     config: {
@@ -25,14 +33,6 @@ export default function Create() {
       blur: 20,
       mode: "uniform",
     },
-  });
-  const [customGradient, setCustomGradient] = useState({
-    color1: "#ffffff",
-    color2: "#000000",
-    color3: "#808080",
-    color4: "#404040",
-    angle: 45,
-    isCustom: false,
   });
 
   const [dragState, setDragState] = useState({
@@ -366,11 +366,11 @@ export default function Create() {
           useGradient={useGradient}
           gradientAngle={gradientAngle}
           solidColor={solidColor}
-          onSolidColorChange={setSolidColorChange}
+          onSolidColorChange={setSolidColor}
           dropShadow={dropShadow}
-          onDropShadowChange={setDropShadowChange}
+          onDropShadowChange={setDropShadow}
           customGradient={customGradient}
-          onCustomGradientChange={setCustomGradientChange}
+          onCustomGradientChange={setCustomGradient}
         />
       </div>
     </div>

@@ -1,12 +1,18 @@
 import React from "react";
-import Home from "./Home";
-//test
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import Create from "./components/Create";
+import { GradientProvider } from "./contexts/GradientContext";
 
 function App() {
   return (
-    <div className="App">
-      <Home />
-    </div>
+    <Router>
+      <GradientProvider>
+        <Routes>
+          <Route path="/create" element={<Create />} />
+          {/* Add other routes as needed */}
+        </Routes>
+      </GradientProvider>
+    </Router>
   );
 }
 
