@@ -239,22 +239,6 @@ export default function Create() {
     }
   };
 
-  const createCustomGradient = (ctx, canvas, colors, angle) => {
-    const gradient = ctx.createLinearGradient(
-      0,
-      0,
-      Math.cos((angle * Math.PI) / 180) * canvas.width,
-      Math.sin((angle * Math.PI) / 180) * canvas.height
-    );
-
-    gradient.addColorStop(0, colors.color1);
-    gradient.addColorStop(0.33, colors.color2);
-    gradient.addColorStop(0.66, colors.color3);
-    gradient.addColorStop(1, colors.color4);
-
-    return gradient;
-  };
-
   useEffect(() => {
     if (image) {
       const img = new Image();

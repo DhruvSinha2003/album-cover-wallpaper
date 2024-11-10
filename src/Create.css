@@ -40,7 +40,7 @@
 }
 
 canvas {
-  width: 100%;
+  width: 100%-15px;
   height: 100%;
   object-fit: contain;
   border: 2px solid var(--accent-primary);
