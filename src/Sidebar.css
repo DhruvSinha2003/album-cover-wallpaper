@@ -146,6 +146,7 @@
 }
 
 .mode-button {
+  color: var(--text-primary);
   flex: 1;
   padding: 8px;
   border: 2px solid var(--border-color);

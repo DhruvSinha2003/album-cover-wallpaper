@@ -172,6 +172,15 @@ export default function Sidebar({
                     isCustom: false,
                   });
                 }
+                if (type === "solid") {
+                  setActiveColorPicker("solid");
+                  setColorPickerAnchor(
+                    document.querySelector(".type-button.active")
+                  );
+                } else {
+                  setActiveColorPicker(null);
+                  setColorPickerAnchor(null);
+                }
               }}
             >
               <div className="button-content">
