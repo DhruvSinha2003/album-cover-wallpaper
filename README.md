@@ -13,7 +13,7 @@ This project allows users to create custom wallpapers using album art from Spoti
 
 ## Video Demonstration
 
-[Watch the video demonstration]
+https://github.com/user-attachments/assets/e26d1bfa-9c36-4a1a-b08d-4093e92bf0c4
 
 ## Getting Started
 
@@ -59,7 +59,7 @@ This project allows users to create custom wallpapers using album art from Spoti
 
 ```sh
    REACT_APP_SPOTIFY_CLIENT_ID=your_client_id
-REACT_APP_SPOTIFY_CLIENT_SECRET=your_client_secret
+   REACT_APP_SPOTIFY_CLIENT_SECRET=your_client_secret
 ```
 
 4. Start the development server:
