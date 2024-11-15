@@ -1,70 +1,69 @@
-# Getting Started with Create React App
+# Album Art Wallpaper
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project allows users to create custom wallpapers using album art from Spotify. Users can search for album covers, customize the background with solid colors or gradients, and apply shadow effects. The final wallpaper can be downloaded as an image file.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Search Albums**: Search for album covers using the Spotify API.
+- **Custom Backgrounds**: Choose between solid colors, auto-generated gradients, or custom gradients.
+- **Shadow Effects**: Apply uniform, custom, or directional shadow effects to the album cover.
+- **Canvas Size Options**: Select different canvas sizes for the wallpaper.
+- **Album Size Adjustment**: Adjust the size of the album cover on the canvas.
+- **Download Wallpaper**: Download the created wallpaper as a PNG image.
 
-### `npm start`
+## Video Demonstration
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+[Watch the video demonstration]
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Getting Started
 
-### `npm test`
+1. Clone the repository:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+   ```sh
+   git clone https://github.com/yourusername/album-art-wallpaper.git
+   ```
 
-### `npm run build`
+2. Install dependencies:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```sh
+   npm install
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. Create a .env file with your Spotify API credentials:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```sh
+   git clone https://github.com/yourusername/album-art-wallpaper.git
+```
 
-### `npm run eject`
+4. Start the development server:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```sh
+   git clone https://github.com/yourusername/album-art-wallpaper.git
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Getting Started
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. Clone the repository:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+   ```sh
+   git clone https://github.com/yourusername/album-art-wallpaper.git
+   ```
 
-## Learn More
+2. Install dependencies:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```sh
+   npm install
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+3. Create a .env file with your Spotify API credentials:
 
-### Code Splitting
+```sh
+   REACT_APP_SPOTIFY_CLIENT_ID=your_client_id
+REACT_APP_SPOTIFY_CLIENT_SECRET=your_client_secret
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+4. Start the development server:
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```sh
+   npm start
+```
