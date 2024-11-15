@@ -40,30 +40,3 @@ git clone https://github.com/yourusername/album-art-wallpaper.git
 ```sh
    git clone https://github.com/yourusername/album-art-wallpaper.git
 ```
-
-## Getting Started
-
-1. Clone the repository:
-
-   ```sh
-   git clone https://github.com/yourusername/album-art-wallpaper.git
-   ```
-
-2. Install dependencies:
-
-```sh
-   npm install
-```
-
-3. Create a .env file with your Spotify API credentials:
-
-```sh
-   REACT_APP_SPOTIFY_CLIENT_ID=your_client_id
-   REACT_APP_SPOTIFY_CLIENT_SECRET=your_client_secret
-```
-
-4. Start the development server:
-
-```sh
-   npm start
-```
