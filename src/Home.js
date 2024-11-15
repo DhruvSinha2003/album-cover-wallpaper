@@ -102,6 +102,12 @@ function Home() {
         style={{ marginTop: albumCover ? "0" : "10%" }}
       >
         <h1>Album Cover Art</h1>
+        <p className="intro-text">
+          Transform your favorite album covers into stunning wallpapers for any
+          device. Search for an album, select your cover art, and create a
+          custom wallpaper that perfectly fits your screen. Express your musical
+          taste through beautifully designed backgrounds.
+        </p>
         <div className="search-wrapper">
           <div className="search-container">
             <input
