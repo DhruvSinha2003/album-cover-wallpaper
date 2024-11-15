@@ -42,6 +42,30 @@ export default function Sidebar({
     mode: "uniform",
   });
 
+  // Create memoized debounced functions
+  const debouncedAlbumSize = useMemo(
+    () => debounce((value) => onAlbumSizeChange(value), 100),
+    [onAlbumSizeChange]
+  );
+
+  const debouncedGradientAngle = useMemo(
+    () => debounce((value) => onGradientAngleChange(value), 100),
+    [onGradientAngleChange]
+  );
+
+  // Handle gradient angle changes
+  const handleGradientAngleChange = useCallback(
+    (newAngle) => {
+      debouncedGradientAngle(newAngle);
+      onCustomGradientChange({
+        ...customGradient,
+        angle: newAngle,
+        isCustom: true,
+      });
+    },
+    [customGradient, debouncedGradientAngle, onCustomGradientChange]
+  );
+
   const handleSizeChange = useCallback(
     (width, height) => {
       onSizeChange({ width, height });
@@ -74,17 +98,6 @@ export default function Sidebar({
     });
   };
 
-  // Create memoized debounced functions
-  const debouncedAlbumSize = useMemo(
-    () => debounce((value) => onAlbumSizeChange(value), 100),
-    [onAlbumSizeChange]
-  );
-
-  const debouncedGradientAngle = useMemo(
-    () => debounce((value) => onGradientAngleChange(value), 100),
-    [onGradientAngleChange]
-  );
-
   // Cleanup debounced functions on unmount
   useEffect(() => {
     return () => {
@@ -103,6 +116,10 @@ export default function Sidebar({
       });
     }
   }, [customColors, backgroundType, customGradient, onCustomGradientChange]);
+
+  // Get current gradient angle based on background type
+  const currentGradientAngle =
+    backgroundType === "customGradient" ? customGradient.angle : gradientAngle;
 
   return (
     <div className="sidebar">
@@ -164,6 +181,7 @@ export default function Sidebar({
                 if (type === "customGradient") {
                   onCustomGradientChange({
                     ...customGradient,
+                    ...customColors,
                     isCustom: true,
                   });
                 } else if (type === "gradient") {
@@ -199,7 +217,7 @@ export default function Sidebar({
                   {type === "customGradient"
                     ? "Custom Gradient"
                     : type === "gradient"
-                    ? "Auto Gradient"
+                    ? "Auto"
                     : "Solid Color"}
                 </span>
               </div>
@@ -259,8 +277,8 @@ export default function Sidebar({
           >
             <span>Angle</span>
             <Slider
-              value={gradientAngle}
-              onChange={(_, value) => debouncedGradientAngle(value)}
+              value={currentGradientAngle}
+              onChange={(_, value) => handleGradientAngleChange(value)}
               min={0}
               max={360}
             />
