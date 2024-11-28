@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1.5rem;
+  padding: 1rem;
   position: fixed;
   width: 100%;
   overflow: hidden;
@@ -18,7 +18,7 @@
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: 1.8rem;
   margin-bottom: 0.25rem;
   text-align: center;
   background: linear-gradient(
@@ -37,8 +37,9 @@ h1 {
   max-width: 600px;
   margin: 0 auto 1rem;
   color: var(--text-secondary);
-  line-height: 1.5;
+  line-height: 1.6;
   font-size: 0.95rem;
+  letter-spacing: 0.02em;
 }
 
 /* Search input styles */
@@ -56,7 +57,7 @@ h1 {
 
 .search-input {
   width: 100%;
-  padding: 0.75rem 1.25rem;
+  padding: 0.6rem 1rem;
   font-size: 1rem;
   background-color: var(--bg-secondary);
   border: 2px solid var(--bg-tertiary);
@@ -85,8 +86,8 @@ h1 {
   border: 1px solid var(--border-color);
   padding: 0.5rem;
   max-height: min(300px, 40vh);
-  overflow-y: auto;
-  overflow-x: hidden; /* Prevent horizontal scrolling */
+  overflow-y: hidden;
+  overflow-x: hidden;
   top: 100%;
   left: 0;
   backdrop-filter: blur(8px);
@@ -164,7 +165,7 @@ h1 {
 .album-display {
   display: flex;
   flex: 1;
-  gap: 2rem;
+  gap: 0.1em;
   align-items: center;
   overflow: hidden;
 }
@@ -174,6 +175,7 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
+  max-height: 90%;
   height: 100%;
   overflow: hidden;
 }
@@ -259,18 +261,29 @@ h1 {
   }
 
   .intro-text {
-    font-size: 0.9rem;
-    padding: 0 1rem;
-    margin-bottom: 0.75rem;
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 1rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+
+  .search-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
   }
 
   .search-container {
-    width: 90%;
-  }
-
-  .search-input {
-    font-size: 0.9rem;
-    padding: 0.75rem 1rem;
+    position: relative;
+    width: 50%;
+    max-width: 500px;
+    display: flex;
+    justify-content: center;
   }
 
   .album-display {

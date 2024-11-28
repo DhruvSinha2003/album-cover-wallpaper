@@ -96,18 +96,18 @@ function Home() {
   };
 
   return (
-    <div className="home-container">
-      <div
-        className="home-content"
-        style={{ marginTop: albumCover ? "0" : "10%" }}
-      >
+    <div
+      className="home-container"
+      style={{ marginTop: albumCover ? "0" : "10%" }}
+    >
+      {" "}
+      <div className="home-content">
         <h1>Album Cover Art</h1>
-        <p className="intro-text">
-          Transform your favorite album covers into stunning wallpapers for any
-          device. Search for an album, select your cover art, and create a
-          custom wallpaper that perfectly fits your screen. Express your musical
-          taste through beautifully designed backgrounds.
-        </p>
+        {!albumCover && (
+          <p className="intro-text">
+            Transform album covers into personalized wallpapers for any device.
+          </p>
+        )}
         <div className="search-wrapper">
           <div className="search-container">
             <input
