@@ -8,6 +8,7 @@ import { createGradient, extractDistinctColors } from "./utils/gradientUtils";
 
 export default function Create() {
   const [solidColor, setSolidColor] = useState("#f0f0f0");
+  const SNAP_THRESHOLD = 30;
   const location = useLocation();
   const { image } = location.state || {};
   const [canvasSize, setCanvasSize] = useState({ width: 1920, height: 1080 });
@@ -47,24 +48,36 @@ export default function Create() {
 
   const drawGuideLines = (ctx, width, height) => {
     ctx.save();
-    ctx.strokeStyle = "rgba(0, 0, 0, 0.7)"; // Use a darker color for better visibility
-    ctx.setLineDash([10, 5]); // Change the dash pattern for better visibility
-    ctx.lineWidth = 2; // Increase the line width for more prominence
-    ctx.shadowColor = "rgba(255, 255, 255, 0.7)"; // Add a white shadow for contrast
-    ctx.shadowBlur = 2;
+    ctx.strokeStyle = "rgba(0, 255, 0, 0.8)"; // Bright green for visibility
+    ctx.setLineDash([10, 5]);
+    ctx.lineWidth = 3; // Thicker lines
+    ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+    ctx.shadowBlur = 5;
 
-    // Vertical guides
-    [0.25, 0.5, 0.75].forEach((percent) => {
+    const centerX = width / 2;
+    const centerY = height / 2;
+
+    // Vertical and horizontal center lines
+    ctx.beginPath();
+    ctx.moveTo(centerX, 0);
+    ctx.lineTo(centerX, height);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(0, centerY);
+    ctx.lineTo(width, centerY);
+    ctx.stroke();
+
+    // Rule of thirds guides
+    [0.25, 0.75].forEach((percent) => {
       const x = width * percent;
+      const y = height * percent;
+
       ctx.beginPath();
       ctx.moveTo(x, 0);
       ctx.lineTo(x, height);
       ctx.stroke();
-    });
 
-    // Horizontal guides
-    [0.25, 0.5, 0.75].forEach((percent) => {
-      const y = height * percent;
       ctx.beginPath();
       ctx.moveTo(0, y);
       ctx.lineTo(width, y);
@@ -73,6 +86,7 @@ export default function Create() {
 
     ctx.restore();
   };
+
   const handleMouseDown = (e) => {
     if (canvasRef.current && imageRef.current) {
       const canvas = canvasRef.current;
@@ -80,7 +94,6 @@ export default function Create() {
       const x = (e.clientX - rect.left) * (canvas.width / rect.width);
       const y = (e.clientY - rect.top) * (canvas.height / rect.height);
 
-      // Check if click is within image bounds
       const scaleFactor = albumSize / 100;
       const imgWidth = imageRef.current.width * scaleFactor;
       const imgHeight = imageRef.current.height * scaleFactor;
@@ -105,6 +118,28 @@ export default function Create() {
     }
   };
 
+  const drawCenterMarker = (ctx, x, y, size = 20) => {
+    if (showGuides) {
+      ctx.save();
+      ctx.strokeStyle = "rgba(255, 0, 0, 0.8)"; // Red color
+      ctx.lineWidth = 3;
+
+      // Horizontal line
+      ctx.beginPath();
+      ctx.moveTo(x - size / 2, y);
+      ctx.lineTo(x + size / 2, y);
+      ctx.stroke();
+
+      // Vertical line
+      ctx.beginPath();
+      ctx.moveTo(x, y - size / 2);
+      ctx.lineTo(x, y + size / 2);
+      ctx.stroke();
+
+      ctx.restore();
+    }
+  };
+
   const handleMouseMove = (e) => {
     if (dragState.isDragging && canvasRef.current) {
       const canvas = canvasRef.current;
@@ -115,10 +150,34 @@ export default function Create() {
       const deltaX = x - dragState.startX;
       const deltaY = y - dragState.startY;
 
+      const newImageX = dragState.imageX + deltaX;
+      const newImageY = dragState.imageY + deltaY;
+
+      const scaleFactor = albumSize / 100;
+      const imgWidth = imageRef.current.width * scaleFactor;
+      const imgHeight = imageRef.current.height * scaleFactor;
+      const imgCenterX =
+        (canvas.width - imgWidth) / 2 + newImageX + imgWidth / 2;
+      const imgCenterY =
+        (canvas.height - imgHeight) / 2 + newImageY + imgHeight / 2;
+      const canvasCenterX = canvas.width / 2;
+      const canvasCenterY = canvas.height / 2;
+
+      let finalImageX = newImageX;
+      let finalImageY = newImageY;
+      if (Math.abs(imgCenterX - canvasCenterX) < SNAP_THRESHOLD) {
+        finalImageX =
+          canvasCenterX - (canvas.width - imgWidth) / 2 - imgWidth / 2;
+      }
+      if (Math.abs(imgCenterY - canvasCenterY) < SNAP_THRESHOLD) {
+        finalImageY =
+          canvasCenterY - (canvas.height - imgHeight) / 2 - imgHeight / 2;
+      }
+
       setDragState((prev) => ({
         ...prev,
-        imageX: prev.imageX + deltaX,
-        imageY: prev.imageY + deltaY,
+        imageX: finalImageX,
+        imageY: finalImageY,
         startX: x,
         startY: y,
       }));
@@ -130,6 +189,7 @@ export default function Create() {
   const handleMouseUp = () => {
     setDragState((prev) => ({ ...prev, isDragging: false }));
     setShowGuides(false);
+    drawImage();
   };
 
   const drawImage = useCallback(() => {
@@ -139,12 +199,6 @@ export default function Create() {
       const img = imageRef.current;
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Reset shadow effects
-      ctx.shadowColor = "transparent";
-      ctx.shadowBlur = 0;
-      ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = 0;
 
       if (useGradient) {
         if (customGradient.isCustom) {
@@ -177,11 +231,16 @@ export default function Create() {
 
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Apply shadow effect before drawing the image
+      if (showGuides) {
+        drawGuideLines(ctx, canvas.width, canvas.height);
+      }
+
+      // Apply shadow effect
       if (dropShadow.config) {
         applyShadowEffect(ctx, dropShadow.config);
       }
 
+      // Draw image
       const scaleFactor = albumSize / 100;
       const newWidth = img.width * scaleFactor;
       const newHeight = img.height * scaleFactor;
@@ -190,16 +249,14 @@ export default function Create() {
 
       ctx.drawImage(img, x, y, newWidth, newHeight);
 
-      // Draw guides if dragging
-      if (showGuides) {
-        drawGuideLines(ctx, canvas.width, canvas.height);
-      }
+      // Draw center marker for the image
+      const imgCenterX = x + newWidth / 2;
+      const imgCenterY = y + newHeight / 2;
+      drawCenterMarker(ctx, imgCenterX, imgCenterY);
 
-      // Reset shadow effects after drawing
+      // Reset shadow
       ctx.shadowColor = "transparent";
       ctx.shadowBlur = 0;
-      ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = 0;
     }
   }, [
     albumSize,
@@ -210,7 +267,6 @@ export default function Create() {
     dropShadow,
     customGradient,
     dragState,
-    showGuides,
   ]);
 
   const canvasRef = useRef(null);

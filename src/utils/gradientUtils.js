@@ -1,4 +1,25 @@
-// gradientUtils.js
+export const createGradient = (ctx, width, height, colors, angle) => {
+  const centerX = width / 2;
+  const centerY = height / 2;
+  const adjustedAngle = Math.floor(angle / 15) * 15; // Round to nearest 15 degrees
+
+  const length = Math.sqrt(width * width + height * height) / 2;
+  const radians = (adjustedAngle - 90) * (Math.PI / 180); // Adjust to start from top
+
+  const startX = centerX + length * Math.cos(radians);
+  const startY = centerY + length * Math.sin(radians);
+  const endX = centerX - length * Math.cos(radians);
+  const endY = centerY - length * Math.sin(radians);
+
+  const gradient = ctx.createLinearGradient(startX, startY, endX, endY);
+
+  colors.forEach((color, index) => {
+    gradient.addColorStop(index / (colors.length - 1), color);
+  });
+
+  return gradient;
+};
+
 export const extractDistinctColors = (imageData) => {
   const colorCounts = {};
   for (let i = 0; i < imageData.length; i += 4) {
@@ -11,7 +32,6 @@ export const extractDistinctColors = (imageData) => {
 
   const sortedColors = Object.entries(colorCounts).sort((a, b) => b[1] - a[1]);
 
-  // Filter out very light and very dark colors
   const filteredColors = sortedColors.filter(([color]) => {
     const [r, g, b] = color.match(/\d+/g).map(Number);
     const brightness = (r * 299 + g * 587 + b * 114) / 1000;
@@ -19,7 +39,6 @@ export const extractDistinctColors = (imageData) => {
     return brightness > 20 && brightness < 230 && saturation > 30;
   });
 
-  // Get two most distinct colors
   const getColorDistance = (color1, color2) => {
     const [r1, g1, b1] = color1.match(/\d+/g).map(Number);
     const [r2, g2, b2] = color2.match(/\d+/g).map(Number);
@@ -44,20 +63,4 @@ export const extractDistinctColors = (imageData) => {
   }
 
   return mostDistinct;
-};
-
-export const createGradient = (ctx, width, height, colors, angle) => {
-  const adjustedAngle = Math.floor(angle / 15) * 15; // Round to nearest 15 degrees
-  const gradient = ctx.createLinearGradient(
-    0,
-    0,
-    Math.cos((adjustedAngle * Math.PI) / 180) * width,
-    Math.sin((adjustedAngle * Math.PI) / 180) * height
-  );
-
-  colors.forEach((color, index) => {
-    gradient.addColorStop(index / (colors.length - 1), color);
-  });
-
-  return gradient;
 };
