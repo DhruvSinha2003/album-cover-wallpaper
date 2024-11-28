@@ -16,6 +16,8 @@ export default function Create() {
   const [useGradient, setUseGradient] = useState(false);
   const [gradientAngle, setGradientAngle] = useState(45);
   const [dominantColors, setDominantColors] = useState([]);
+  const [isColorPickerActive, setIsColorPickerActive] = useState(false);
+  const [colorPickerCallback, setColorPickerCallback] = useState(null);
   const [customGradient, setCustomGradient] = useState({
     color1: "#FF5733",
     color2: "#33FF57",
@@ -116,6 +118,62 @@ export default function Create() {
         setShowGuides(true);
       }
     }
+  };
+
+  const handleCanvasColorPick = useCallback(
+    (e) => {
+      if (!isColorPickerActive || !canvasRef.current || !imageRef.current)
+        return;
+
+      const canvas = canvasRef.current;
+      const rect = canvas.getBoundingClientRect();
+      const x = (e.clientX - rect.left) * (canvas.width / rect.width);
+      const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+
+      const ctx = canvas.getContext("2d");
+      const pixel = ctx.getImageData(x, y, 1, 1);
+      const color = `rgb(${pixel.data[0]},${pixel.data[1]},${pixel.data[2]})`;
+
+      // Convert RGB to Hex
+      const rgbToHex = (r, g, b) =>
+        "#" +
+        [r, g, b]
+          .map((x) => {
+            const hex = x.toString(16);
+            return hex.length === 1 ? "0" + hex : hex;
+          })
+          .join("");
+
+      const hexColor = rgbToHex(pixel.data[0], pixel.data[1], pixel.data[2]);
+
+      if (colorPickerCallback) {
+        colorPickerCallback(hexColor);
+        setIsColorPickerActive(false);
+        setColorPickerCallback(null);
+      }
+    },
+    [isColorPickerActive, colorPickerCallback]
+  );
+
+  // Modify existing event listeners
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (isColorPickerActive && canvas) {
+      canvas.style.cursor = "crosshair";
+      canvas.addEventListener("click", handleCanvasColorPick);
+    }
+
+    return () => {
+      if (canvas) {
+        canvas.removeEventListener("click", handleCanvasColorPick);
+        canvas.style.cursor = "default";
+      }
+    };
+  }, [isColorPickerActive, handleCanvasColorPick]);
+
+  const activateCanvasColorPicker = (callback) => {
+    setIsColorPickerActive(true);
+    setColorPickerCallback(() => callback);
   };
 
   const drawCenterMarker = (ctx, x, y, size = 20) => {
@@ -263,6 +321,8 @@ export default function Create() {
     useGradient,
     gradientAngle,
     dominantColors,
+    drawCenterMarker,
+    showGuides,
     solidColor,
     dropShadow,
     customGradient,
@@ -413,6 +473,8 @@ export default function Create() {
           onDropShadowChange={setDropShadow}
           customGradient={customGradient}
           onCustomGradientChange={setCustomGradient}
+          onActivateCanvasColorPicker={activateCanvasColorPicker}
+          isColorPickerActive={isColorPickerActive}
         />
       </div>
     </div>

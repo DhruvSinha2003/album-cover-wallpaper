@@ -22,6 +22,8 @@ export default function Sidebar({
   onDropShadowChange,
   customGradient,
   onCustomGradientChange,
+  onActivateCanvasColorPicker,
+  isColorPickerActive,
 }) {
   const [backgroundType, setBackgroundType] = useState("solid");
   const [colorPickerAnchor, setColorPickerAnchor] = useState(null);
@@ -42,7 +44,34 @@ export default function Sidebar({
     mode: "uniform",
   });
 
-  // Create memoized debounced functions
+  const handleColorPickerClick = (event, colorKey) => {
+    setColorPickerAnchor(event.currentTarget);
+    setActiveColorPicker(colorKey);
+  };
+
+  const handleColorPickerWithCanvasOption = (event, colorKey) => {
+    handleColorPickerClick(event, colorKey);
+    setColorPickerWithCanvasOption(true);
+  };
+
+  const [colorPickerWithCanvasOption, setColorPickerWithCanvasOption] =
+    useState(false);
+  const handleCanvasColorPick = () => {
+    handleColorPickerClose();
+
+    onActivateCanvasColorPicker((color) => {
+      if (activeColorPicker === "solid") {
+        onSolidColorChange(color);
+      } else if (activeColorPicker?.startsWith("color")) {
+        setCustomColors((prev) => ({
+          ...prev,
+          [activeColorPicker]: color,
+        }));
+      }
+      setColorPickerWithCanvasOption(false);
+    });
+  };
+
   const debouncedAlbumSize = useMemo(
     () => debounce((value) => onAlbumSizeChange(value), 100),
     [onAlbumSizeChange]
@@ -53,7 +82,6 @@ export default function Sidebar({
     [onGradientAngleChange]
   );
 
-  // Handle gradient angle changes
   const handleGradientAngleChange = useCallback(
     (newAngle) => {
       debouncedGradientAngle(newAngle);
@@ -73,13 +101,6 @@ export default function Sidebar({
     [onSizeChange]
   );
 
-  // Handle color picker click
-  const handleColorPickerClick = (event, colorKey) => {
-    setColorPickerAnchor(event.currentTarget);
-    setActiveColorPicker(colorKey);
-  };
-
-  // Handle color picker close
   const handleColorPickerClose = () => {
     setColorPickerAnchor(null);
     setActiveColorPicker(null);
@@ -242,17 +263,48 @@ export default function Sidebar({
       >
         <div className="color-picker-popup">
           {activeColorPicker === "solid" ? (
-            <HexColorPicker color={solidColor} onChange={onSolidColorChange} />
+            <>
+              <HexColorPicker
+                color={solidColor}
+                onChange={onSolidColorChange}
+              />
+              {isColorPickerActive ? (
+                <div className="canvas-color-picker-active">
+                  Click on the canvas to pick a color
+                </div>
+              ) : (
+                <button
+                  onClick={handleCanvasColorPick}
+                  className="canvas-color-pick-btn"
+                >
+                  Pick Color from Canvas
+                </button>
+              )}
+            </>
           ) : activeColorPicker?.startsWith("color") ? (
-            <HexColorPicker
-              color={customColors[activeColorPicker]}
-              onChange={(color) => {
-                setCustomColors((prev) => ({
-                  ...prev,
-                  [activeColorPicker]: color,
-                }));
-              }}
-            />
+            <>
+              <HexColorPicker
+                color={customColors[activeColorPicker]}
+                onChange={(color) => {
+                  setCustomColors((prev) => ({
+                    ...prev,
+                    [activeColorPicker]: color,
+                  }));
+                }}
+              />
+              {isColorPickerActive ? (
+                <div className="canvas-color-picker-active">
+                  Click on the canvas to pick a color
+                </div>
+              ) : (
+                <button
+                  onClick={handleCanvasColorPick}
+                  className="canvas-color-pick-btn"
+                >
+                  Pick Color from Canvas
+                </button>
+              )}
+            </>
           ) : null}
         </div>
       </Popover>
