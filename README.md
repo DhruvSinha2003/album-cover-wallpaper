@@ -32,11 +32,12 @@ git clone https://github.com/yourusername/album-art-wallpaper.git
 3. Create a .env file with your Spotify API credentials:
 
 ```sh
-   git clone https://github.com/yourusername/album-art-wallpaper.git
+   REACT_APP_SPOTIFY_CLIENT_ID= client id
+   REACT_APP_SPOTIFY_CLIENT_SECRET= client secret
 ```
 
 4. Start the development server:
 
 ```sh
-   git clone https://github.com/yourusername/album-art-wallpaper.git
+   npm start
 ```
